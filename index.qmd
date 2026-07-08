@@ -1,0 +1,12 @@
+---
+title: "AV Resource Portal"
+
+reference-location: margin
+citation-location: margin
+---
+
+Welcome to the AV Resource Portal.  
+
+- [AV Data Dashboard](./data_dashboard/vehicles_and_people.html)
+- [Permit Overview](./permit_history/permit_history.html) (coming soon)
+- Regulation Resource (coming soon)

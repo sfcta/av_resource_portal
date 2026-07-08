@@ -1,0 +1,328 @@
+---
+title: Safety
+execute:
+    echo: false
+format: 
+    html:
+        toc: true
+        toc-depth: 4
+        page-layout: article
+        title-block-banner: true
+reference-location: margin
+citation-location: margin
+---
+
+
+```{python}
+import pandas as pd
+from pathlib import Path
+import datetime
+import plotly.express as px
+import plotly.graph_objects as go
+
+INDIR = 'Q:/Model Research/AV_Resource_Portal/data'
+
+crash_bubble_color = '#c1121f'
+warm_sunset = [
+    '#faa275', # none
+    '#ff8c61', # minor
+    '#ce6a85', # moderate
+    '#985277', # serious
+    '#5c374c', # fatal
+    '#eff1ed', # unknown
+]
+
+warm_sunset_map = {
+    'No Injuries Reported':'#faa275',
+    'Minor':'#ff8c61',
+    'Moderate':'#ce6a85',
+    'Serious':'#985277',
+    'Fatality':'#5c374c',
+    'Unknown':'#eff1ed',
+}
+
+warm_rustic_map = {
+    'No Injuries Reported':'#585123',
+    'Minor':'#eec170',
+    'Moderate':'#f2a65a',
+    'Serious':'#f58549',
+    'Fatality':'#772f1a',
+    'Unknown':'#eff1ed',
+}
+
+coral_map = {
+    'No Injuries Reported':'#ffe3e0',
+    'Minor':'#fbc3bc',
+    'Moderate':'#f7a399',
+    'Serious':'#f38375',
+    'Fatality':'#ef6351',
+    'Unknown':'#eff1ed',
+}
+
+lavender_map = {
+    'No Injuries Reported':'#f5e6e8',
+    'Minor':'#d5c6e0',
+    'Moderate':'#aaa1c8',
+    'Serious':'#967aa1',
+    'Fatality':'#192a51',
+    'Unknown':'#eff1ed',
+}
+
+crash_state = pd.read_csv(Path(INDIR) / 'crash_state.csv')
+crash_city = pd.read_csv(Path(INDIR) / 'crash_city.csv')
+crash_state_sf = pd.read_csv(Path(INDIR) / 'crash_state_sf.csv')
+crash_sf_sev = pd.read_csv(Path(INDIR) / 'crash_sf_sev.csv')
+crash_sf_comp = pd.read_csv(Path(INDIR) / 'crash_sf_comp.csv')
+crash_ca_comp_sev = pd.read_csv(Path(INDIR) / 'crash_ca_comp_sev.csv')
+crash_geo_sev = pd.read_csv(Path(INDIR) / 'crash_geo_sev.csv')
+crash_geo_comp = pd.read_csv(Path(INDIR) / 'crash_geo_comp.csv')
+crashes_by_month_ca = pd.read_csv(Path(INDIR) / 'crashes_by_month_ca.csv')
+crashes_by_month_sf = pd.read_csv(Path(INDIR) / 'crashes_by_month_sf.csv')
+
+severity_order = ['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']
+
+crash = pd.read_csv(r'Q:\Data\Regulatory\AV\NHTSA\processed\nhtsa_ads_crashes.csv')
+# hotfix
+crash.loc[crash['operating_entity'].eq('Waymo LLlC'), 'operating_entity'] = 'Waymo'
+crash.loc[crash['operating_entity'].eq('Apollo Autonomous Driving USA'), 'operating_entity'] = 'Apollo'
+comp_crashtot_descending = crash.groupby('operating_entity').size().sort_values(ascending=False).index.tolist()
+```
+
+## Introduction
+The National Highway Transportation Safety Administration (NHTSA) requires companies operating autonomous vehicle (AV) technology to report collisions.
+
+## Crashes in the US
+AV Crashes are reported throughout the country, but the largest single concentration is in San Francisco.  
+
+```{python}
+#| column: page-right
+#| layout-nrow: 1
+
+fig1 = px.scatter_map(
+    crash_geo_sev,
+    lat='lat',
+    lon='lng',
+    size='Total',
+    #color='Total',
+    #color_continuous_scale='orrd',
+    color_discrete_sequence=['#c1121f'],
+    size_max=70,
+    hover_name='city',
+    hover_data=severity_order,
+    
+    zoom=3
+).update_layout(
+    map_style="basic",
+    margin={"r":0,"t":0,"l":0,"b":0},
+    updatemenus=[
+        dict(
+            buttons=list([
+                dict(
+                    args=[{"marker.size":crash_geo_sev[severity].to_numpy()}],
+                    label=severity,
+                    method="restyle",
+                ) for severity in ['Total'] + severity_order
+            ]),
+            bgcolor=None,
+            direction="down",
+            showactive=True,
+            x=0.025,
+            xanchor="left",
+            y=0.975,
+            yanchor="top"
+        ),
+    ]
+)
+
+
+fig2 = px.scatter_map(
+    crash_geo_comp,
+    lat='lat',
+    lon='lng',
+    size='Total',
+    #color='Total',
+    #color_continuous_scale='orrd',
+    color_discrete_sequence=['#003049'],
+    size_max=70,
+    hover_name='city',
+    hover_data=comp_crashtot_descending[:5],
+    zoom=3
+).update_layout(
+    map_style="basic",
+    margin={"r":0,"t":0,"l":0,"b":0},
+    updatemenus=[
+        dict(
+            buttons=list([
+                dict(
+                    args=[{"marker.size":crash_geo_comp[company].to_numpy()}],
+                    label=company,
+                    method="restyle"
+                ) for company in ['Total'] + comp_crashtot_descending 
+            ]),
+            direction="down",
+            showactive=True,
+            x=0.025,
+            xanchor="left",
+            y=0.975,
+            yanchor="top",
+        ),
+    ]
+)
+
+fig1.show()
+fig2.show()
+
+```
+
+San Francisco **alone** has more crashes than any other state besides California, and has the most crashes of any county in California despite being a geographically small county . San Francisco has X as many collisions as Los Angeles despite being roughly 1/100th the area.
+
+```{python}
+#| column: page-right
+#| layout-nrow: 1
+
+fig3 = px.bar(
+    crash_state_sf.loc[:,['state_or_city','size']], 
+    x='state_or_city', 
+    y='size', 
+    color='state_or_city',
+    color_discrete_sequence=[
+        '#d6d6d6', #'#d4c5de',
+        '#ffd100',#'#e95e50',
+    ] + 17 * ['#d6d6d6'],
+)
+
+#| title: Crashes by City
+
+fig4 = px.pie(
+    crash_city,
+    names='city_top10',
+    values='size'
+)
+
+fig3.show()
+fig4.show()
+```
+
+## Crashes in San Francisco
+Most crashes result in no injury.  Waymo, the only company operating commercial AV passenger service under a deployment permit, has the most crashes.  Cruise, which also briefly operated commercial AV passenger service under a deployment permit, follows with the second-most number of crashes
+
+:::{.column-body} 
+:::{.panel-tabset}
+
+## San Francisco
+
+```{python}
+
+
+crash_disp = (
+    crash.loc[crash['city'].eq('San Francisco')]
+    .groupby(['operating_entity','highest_injury_severity_alleged_legacy'], as_index=False)
+    .size()
+    .sort_values(by='size',ascending=False)
+    .rename(columns={'size':'crashes'})
+)
+
+
+fig5 = px.bar(
+    crash_disp,
+    x='operating_entity',
+    y='crashes',
+    color='highest_injury_severity_alleged_legacy',
+    color_discrete_map= lavender_map,
+    category_orders = {'highest_injury_severity_alleged_legacy':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
+)
+
+fig5.show()
+```
+
+## Los Angeles
+
+```{python}
+
+crash_disp = (
+    crash.loc[crash['city'].eq('Los Angeles')]
+    .groupby(['operating_entity','highest_injury_severity_alleged_legacy'], as_index=False)
+    .size()
+    .sort_values(by='size',ascending=False)
+    .rename(columns={'size':'crashes'})
+)
+
+figX = px.bar(
+    crash_disp,
+    x='operating_entity',
+    y='crashes',
+    color='highest_injury_severity_alleged_legacy',
+    color_discrete_map= lavender_map,
+    category_orders = {'highest_injury_severity_alleged_legacy':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
+)
+figX.show()
+```
+
+## California
+
+```{python}
+
+
+crash_disp = (
+    crash.loc[crash['state'].eq('CA')]
+    .groupby(['operating_entity','highest_injury_severity_alleged_legacy'], as_index=False)
+    .size()
+    .sort_values(by='size',ascending=False)
+    .rename(columns={'size':'crashes'})
+)
+
+top5 = crash_disp.groupby(['operating_entity']).agg({'crashes':'sum'}).sort_values(by=['crashes'], ascending=False).index[0:5]
+
+crash_disp.loc[~crash_disp['operating_entity'].isin(top5), 'operating_entity'] = "All Others"
+crash_disp = (
+    crash_disp.groupby(['operating_entity','highest_injury_severity_alleged_legacy'], as_index=False)
+    .agg({'crashes':'sum'})
+    .sort_values(by='crashes',ascending=False)
+)
+
+fig6 = px.bar(
+    crash_disp,
+    x='operating_entity',
+    y='crashes',
+    color='highest_injury_severity_alleged_legacy',
+    color_discrete_map= lavender_map,
+    category_orders = {'highest_injury_severity_alleged_legacy':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
+)
+fig6.show()
+```
+
+## United States
+
+```{python}
+
+
+crash_disp = (
+    crash.groupby(['operating_entity','highest_injury_severity_alleged_legacy'], as_index=False)
+    .size()
+    .sort_values(by='size',ascending=False)
+    .rename(columns={'size':'crashes'})
+)
+
+top5 = crash_disp.groupby(['operating_entity']).agg({'crashes':'sum'}).sort_values(by=['crashes'], ascending=False).index[0:5]
+
+crash_disp.loc[~crash_disp['operating_entity'].isin(top5), 'operating_entity'] = "All Others"
+crash_disp = (
+    crash_disp.groupby(['operating_entity','highest_injury_severity_alleged_legacy'], as_index=False)
+    .agg({'crashes':'sum'})
+    .sort_values(by='crashes',ascending=False)
+)
+
+fig7 = px.bar(
+    crash_disp,
+    x='operating_entity',
+    y='crashes',
+    color='highest_injury_severity_alleged_legacy',
+    color_discrete_map= lavender_map,
+    category_orders = {'highest_injury_severity_alleged_legacy':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
+)
+fig7.show()
+```
+
+:::
+
+:::

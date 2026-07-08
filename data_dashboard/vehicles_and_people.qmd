@@ -1,0 +1,291 @@
+---
+title: Vehicles and People
+execute:
+    echo: false
+format: 
+    html:
+        toc: true
+        toc-depth: 4
+        page-layout: article
+        title-block-banner: true
+reference-location: margin
+citation-location: margin
+---
+
+
+```{python}
+import pandas as pd
+from pathlib import Path
+import datetime
+import plotly.express as px
+import plotly.graph_objects as go
+
+color_set_a = ['#ff5e5b', '#00cecb', '#ffed66', '#ffffea', '#d8d8d8']
+light_color_set_a = ['#ff9e9d', '#64e4e2', '#fff4a3', '#fffff2', '#e8e8e8']
+
+color_set_b = ['#FFC857','#E9724C','#C5283D','#481D24','#255F85']
+
+color_set_c = ['#0cb2af','#a1c65d','#fac723','#f29222','#e95e50','#936fac']
+color_set_c_light = ['#87f7f5','#d9e8be','#fde9a7','#fad3a7','#f6bfb9','#d4c5de']
+color_set_d = ['#264653','#287271','#2a9d8f','#e9c46a','#f4a261','#e76f51']
+
+company_permit_type_color_map = {
+    'Waymo DMV Testing Drivered':light_color_set_a[0],
+    'Waymo DMV Testing Driverless':light_color_set_a[0],
+    'Waymo CPUC Deployment Drivered':color_set_a[0],
+    'Waymo CPUC Deployment Driverless':color_set_a[0],
+    'Cruise DMV Testing Drivered':light_color_set_a[1],
+    'Cruise DMV Testing Driverless':light_color_set_a[1],
+    'Cruise CPUC Deployment Drivered':color_set_a[1],
+    'Cruise CPUC Deployment Driverless':color_set_a[1],
+    'Zoox DMV Testing Drivered':light_color_set_a[2],
+    'Zoox DMV Testing Driverless':light_color_set_a[2],
+    'Zoox CPUC Deployment Drivered':color_set_a[2],
+    'Zoox CPUC Deployment Driverless':color_set_a[2],
+    'All Others Combined DMV Testing Drivered':light_color_set_a[3],
+    'All Others Combined DMV Testing Driverless':light_color_set_a[3],
+    'All Others Combined CPUC Deployment Drivered':color_set_a[3],
+    'All Others Combined CPUC Deployment Driverless':color_set_a[3],
+    'Drive alone':color_set_d[0],
+    'Bus':color_set_d[1],
+}
+company_permit_type_dash_map = {
+    'Waymo DMV Testing Drivered':'dot',
+    'Waymo DMV Testing Driverless':None,
+    'Waymo CPUC Deployment Drivered':'dot',
+    'Waymo CPUC Deployment Driverless':None,
+    'Cruise DMV Testing Drivered':'dot',
+    'Cruise DMV Testing Driverless':None,
+    'Cruise CPUC Deployment Drivered':'dot',
+    'Cruise CPUC Deployment Driverless':None,
+    'Zoox DMV Testing Drivered':'dot',
+    'Zoox DMV Testing Driverless':None,
+    'Zoox CPUC Deployment Drivered':'dot',
+    'Zoox CPUC Deployment Driverless':None,
+    'All Others Combined DMV Testing Drivered':'dot',
+    'All Others Combined DMV Testing Driverless':None,
+    'All Others Combined CPUC Deployment Drivered':'dot',
+    'All Others Combined CPUC Deployment Driverless':None,
+    'Drive alone':'dash',
+    'Bus':'dash',
+}
+
+company_county_color_map = {
+    'Waymo San Francisco':color_set_c[0],
+    'Waymo Los Angeles':color_set_c[1],
+    'Waymo San Mateo':color_set_c[2],
+    'Cruise San Francisco':color_set_c[3],
+    'Waymo Unidentified':color_set_c[4],
+}
+
+company_county_pattern_map = {
+    'Waymo San Francisco (Drivered)':'/',
+    'Waymo San Francisco (Driverless)':None,
+    'Waymo Los Angeles (Drivered)':'/',
+    'Waymo Los Angeles (Driverless)':None,
+    'Waymo San Mateo (Drivered)':'/',
+    'Waymo San Mateo (Driverless)':None,
+    'Cruise San Francisco (Drivered)':'/',
+    'Cruise San Francisco (Driverless)':None,
+    'Waymo Unidentified (Drivered)':'/',
+    'Waymo Unidentified (Driverless)':None,
+    'Cruise Unidentified (Drivered)':'/',
+    'Cruise Unidentified (Driverless)':None,
+}
+
+INDIR = 'Q:/Model Research/AV_Resource_Portal/data'
+trip_long = pd.read_csv(Path(INDIR) / 'trips_by_company_and_permit_type (deploy only) long.csv')
+vmt_long = pd.read_csv(Path(INDIR) / 'vmt_by_company_and_permit_type_long.csv')
+trip_county_long = pd.read_csv(Path(INDIR) / 'deployment_trips_by_county.csv')
+period_vmt = pd.read_csv(Path(INDIR) / 'deployment_period_vmt.csv')
+#waymo_period_vmt = pd.read_csv(Path(INDIR) / 'waymo_driverless_deployment_period_vmt.csv')
+#cruise_period_vmt = pd.read_csv(Path(INDIR) / 'cruise_driverless_deployment_period_vmt.csv')
+
+```
+
+## Introduction
+The first Autonomous Vehicle (AV) testing permits were issued by the California Department of Motor Vehicles (DMV) in 2018 to companies testing without safety drivers.  The first driverless deployment permit was issued to Waymo in 2021.  Until this year (2026), a company operating under a deployment permit was not required to report any data to the DMV.  The California Public Utilities Commission (CPUC), which regulates AV passenger services like Waymo and Zoox, began issuing AV pilot permits in XXXX and deployment permits in 2022.
+
+The AV Resource Page's Vehicles and People section uses data from 
+
+- DMV
+- CPUC
+
+## Vehicle Miles Traveled
+
+### By Company and Permit Type
+Vehicle miles traveled (VMT) grew gradually from 2020 through 2023 when Waymo's VMT began to expand more rapidly.  Waymo has reported more VMT than other companies in each permit category for most of its history.  
+
+Note that because it is possible that some of the VMT reported to DMV overlaps with VMT reported to CPUC, and because VMT has historically been reported to DMV only under testing permits, but not under deployment permits, it is not possible to sum across permit types.  
+
+```{python}
+#| label: fig1
+#| column: page-right
+
+fig4 = px.line(
+    vmt_long.loc[:,['date','label','vmt']], 
+    x='date', 
+    y='vmt',
+    color='label',
+    color_discrete_map=company_permit_type_color_map,
+    line_dash='label',
+    line_dash_map=company_permit_type_dash_map,
+    #height=500,
+)
+
+#fig4.update_layout(
+#    legend=dict(
+#        title='',
+#        orientation='h'
+#        )
+#    )
+fig4.show()
+```
+
+### Passenger Service and Deadheading
+AV passenger services drive around empty in between trips.  This is called deadheading.  The CPUC categorizes passenger service into 3 phases: 
+1. A vehicle is empty and waiting for a passenger to request a ride
+2. Driving to pick up a passenger
+3. Transporting the passenger.  
+
+Data by phase of service is reported to CPUC by companies operating under deployment permits.  Waymo is the only company currently operating driverless deployment passenger service.  Their VMT throughout California has grown consistently over time with only a few notable dips.  Cruise briefly operated driverless deployment passenger service before their permit was suspended and eventually revoked.  
+
+```{python}
+#| column: page-right
+#| layout-nrow: 1
+
+fig5 = px.area(
+    period_vmt.loc[:,['company','date','period','period_vmt']], 
+    x='date', 
+    y='period_vmt',
+    facet_col='company',
+    color='period',
+)
+fig5.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+fig5.show()
+```
+
+Person miles traveled (PMT) measures the distance that people travel.  An AV with 2 passengers that drives 1 VMT has 2 PMT.  One way to measure efficiency is PMT / VMT.  Driving alone, long considered the least-efficient mode has a PMT/VMT of 1.  Average PMT/VMT for a bus in San Francisco was 12.6
+
+```{python}
+#| column: page-right
+#| layout-nrow: 1
+
+synth_da = trip_long[['date']].drop_duplicates()
+synth_da['label'] = 'Drive alone'
+synth_da['pmt_over_vmt'] = 1
+synth_bus = synth_da.copy()
+synth_da['label'] = 'Bus'
+synth_da['pmt_over_vmt'] = 12.6
+
+
+
+fig7 = px.line(
+    pd.concat(
+        [trip_long.loc[:,['date','label','pmt_over_vmt']],
+         synth_da,
+         synth_bus
+        ]
+    ), 
+    x='date', 
+    y='pmt_over_vmt',
+    color='label',
+    color_discrete_map=company_permit_type_color_map,
+    line_dash='label',
+    line_dash_map=company_permit_type_dash_map,
+)
+
+fig7.update_layout(
+    legend=dict(
+        title='',
+        orientation='h'
+        )
+    ).update_traces(
+    visible="legendonly", 
+    selector=lambda t: t.name in ["Bus"]
+)
+
+fig8 = px.line(
+    trip_long.loc[:,['date','label','deadhead_rate']], 
+    x='date', 
+    y='deadhead_rate',
+    color='label',
+    color_discrete_map=company_permit_type_color_map,
+    line_dash='label',
+    line_dash_map=company_permit_type_dash_map,
+)
+
+fig8.update_layout(
+    legend=dict(
+        title='',
+        orientation='h',
+        ),
+    yaxis=dict(
+        range=(0,1)
+    )
+)
+
+
+
+fig7.show()
+fig8.show()
+```
+
+### Passenger Trips
+Passenger trips are reported for companies operating under CPUC pilot and deployment permits.  Under pilot permits, a single statewide number is reported by month.  Under deployment permits, trips are reported by Census Tract.  In January 2025, Waymo (the only remaining deployment permittee) began redacting their trip Census Tracts, making it impossible to determine where in California they are providing trips.  
+
+```{python}
+#| column: page-right
+#| layout-nrow: 1
+
+fig1 = px.line(
+    trip_long.loc[:,['date','label','trips']], 
+    x='date', 
+    y='trips',
+    color='label',
+    color_discrete_map=company_permit_type_color_map,
+    line_dash='label',
+    line_dash_map=company_permit_type_dash_map,
+)
+fig1.update_layout(
+    legend=dict(
+        title='',
+        orientation='h'
+        )
+    )
+
+fig3 = px.bar(
+    trip_county_long.loc[:,['date','label','trips_start']], 
+    x='date', 
+    y='trips_start',
+    color='label',
+    color_discrete_map=company_county_color_map,
+).update_traces(
+    dict(marker_pattern_fgcolor=color_set_c_light[4],
+         marker_pattern_shape='/',
+         opacity=0.75
+        ),
+    selector=({'legendgroup':'Waymo Unidentified'}),
+)
+
+fig3.update_layout(
+    legend=dict(
+        title='',
+        orientation='h'
+        )
+    )
+
+fig1.show()
+fig3.show()
+``` 
+
+### Geographic Distribution (2024 and earlier)
+Based on geographic detail reported up through December 2024, AV trips occur in San Francisco and Los Angeles and are much more heavily concentrated in San Francisco.  Because Waymo no longer publicly reports any location information, it is not possible to say whether their growth from 2025 onward is from expansion into new markets or growth in existing markets.  
+
+```{=html}
+
+<div class="column-page-right">
+    <iframe id="scaled-frame" src="https://sfcta.github.io/report-tncs2020-simwrapper/files/simwrapper-data/reports/av_dashboard/viz-map-san-francisco.yaml?embed" height=500 width=49%></iframe>
+    <iframe id="scaled-frame" src="https://sfcta.github.io/report-tncs2020-simwrapper/files/simwrapper-data/reports/av_dashboard/viz-map-los-angeles.yaml?embed" height=500 width=49%></iframe>
+</div>
+```

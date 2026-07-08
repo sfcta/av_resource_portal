@@ -1,0 +1,39 @@
+project:
+  type: website
+  render: 
+    - "*.qmd"
+    - "!data_dashboard/dashboard.qmd"
+
+website:
+  title: "AV Resource Portal"
+  bread-crumbs: true
+  page-navigation: true
+  navbar:
+    left:
+      - text: "Data Dashboard"
+        href: data_dashboard/vehicles_and_people.qmd
+      - text: "Permit Overview"
+        href: permit_history/permit_history.qmd
+      - about.qmd
+  sidebar:
+    - title: "Data Dashboard"
+      contents: 
+      - text: "Vehicles and People"
+        href: data_dashboard/vehicles_and_people.qmd
+      - text: "Safety"
+        href: data_dashboard/safety.qmd
+      - text: "Transparency"
+        href: data_dashboard/transparency.qmd
+
+format:
+  html:
+    smooth-scroll: true
+    theme:
+      - cosmo
+      - brand
+    css: styles.css
+    toc: true
+
+
+
+

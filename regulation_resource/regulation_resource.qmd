@@ -1,0 +1,14 @@
+---
+title: Permit History
+execute:
+    echo: false
+format: 
+    html:
+        toc: true
+        toc-expand: false
+        page-layout: article
+---
+
+:::{.column-body}
+PLACEHOLDER
+:::
