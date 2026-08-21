@@ -11,13 +11,15 @@ website:
   navbar:
     left:
       - text: "Data Dashboard"
-        href: data_dashboard/vehicles_and_people.qmd
+        href: data_dashboard/introduction.qmd
       - text: "Permit Overview"
         href: permit_history/permit_history.qmd
       - about.qmd
   sidebar:
     - title: "Data Dashboard"
       contents: 
+      - text: "Introduction"
+        href: data_dashboard/introduction.qmd
       - text: "Vehicles and People"
         href: data_dashboard/vehicles_and_people.qmd
       - text: "Safety"
@@ -32,7 +34,7 @@ format:
       - cosmo
       - brand
     css: styles.css
-    toc: true
+    toc: false
 
 
 

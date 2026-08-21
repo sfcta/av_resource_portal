@@ -1,0 +1,68 @@
+---
+title: Transparency
+execute:
+    echo: false
+format: 
+    html:
+        toc: true
+        toc-depth: 4
+        page-layout: article
+        title-block-banner: true
+reference-location: margin
+citation-location: margin
+---
+
+::: {.callout-important}
+The AV Resource Portal's Data Dashboard was intended to show what publicly available data says about Autonomous Vehicle (AV) operations in San Francisco.  However, as described further in the Transparency section, limitations in the way data reports are designed, and redactions made by AV companies under privacy or confidential business information claims prevent the ability to present San Francisco data in most cases.  
+:::
+
+## Introduction
+The first Autonomous Vehicle (AV) testing permits were issued by the California Department of Motor Vehicles (DMV) in 2018 to companies testing without safety drivers.  The first driverless deployment permit was issued to Waymo in 2021.  Until this year (2026), a company operating under a deployment permit was not required to report any data to the DMV.  The California Public Utilities Commission (CPUC), which regulates AV passenger services like Waymo and Zoox, began issuing AV pilot permits in XXXX and deployment permits in 2022.
+
+The AV Resource Page uses data from 
+
+- DMV
+- CPUC
+- NHTSA
+
+
+## Data Sources
+The data used in the AV Resource Portal is from public versions of data released by the California Department of Motor Vehicles (DMV), California Public Utilities Commission (CPUC), and National Highway Transportation Safety Administration (NHTSA).
+
+### National Highway Transportation Safety Administration
+NHTSA's [Standing General Order (SGO)](https://www.nhtsa.gov/sites/nhtsa.gov/files/2025-04/third-amended-SGO-2021-01_2025.pdf) is the most comprehensive source of AV collision data in the United States.  The third amendment to the SGO changed the data schema and the requirements specifying which events must be reported, but the new version is largely compatible with the legacy data.
+
+The SGO data is typically updated monthly.  Some data in the public version is truncated or redacted, including:
+
+- Vehicle identifiers: `VIN`, `Serial Number`
+- Location information: `Latitude`, `Longitude`, `Address`, `Zip Code`
+- Other: `Narrative`, `Within ODD?`
+
+The SGO data may contain multiple records for each individual incident, as companies file updated reports with NHTSA.  If you are working with this, take care to use the newest version of each incident record, identified by `Same Incident ID`.
+
+[source](https://www.nhtsa.gov/laws-regulations/standing-general-order-crash-reporting)
+
+### California Department of Motor Vehicles 
+The DMV recently adopted new regulations, which expand data reporting to include new types of data and, importantly, require companies with deployment permits to report data. Previous regulations only required companies with testing permits to report data.  Because the new regulations recently went into effect, no data under the new requirements has been reported yet.  
+
+Data under the previous rules was reported annually covering a period of December - November, and typically released the following February.  The reporting cadence results in a long lag in data availability and the data reporting period inhibits interoperability with other data sources.  
+
+VMT data is reported without geographic detail, and prior to new regulations was not reported in deployment at all.  
+
+[source](https://dmvpublicaffairs.wetransfer.com/downloads/e6a196103b7a16801d4acd452cf7e35c20260220222733/70cc0b?t_lsid=e71827f1-358f-4135-a906-b9f4223c5633&t_network=link&t_rid=YXV0aDB8VHJhbnNmZXJ8cGg2MjFxMHI5bmc=&t_s=download_link&t_ts=1771626453)
+
+### California Public Utilities Commission
+The CPUC collects rudimentary data for companies operating with pilot permits, and much more extensive data for companies operating under deployment permits.  Pilot permittees over XXXXX trips per month are subject to deployment reporting requirements.  
+
+Pilot data is submitted in different file formats and data schemas by different companies, making it very difficult to use.  
+
+Deployment data is heavily redacted.  
+
+[source](https://www.cpuc.ca.gov/regulatory-services/licensing/transportation-licensing-and-analysis-branch/autonomous-vehicle-programs/quarterly-reporting)
+
+## Interoperability and Challenges
+[TODO]
+
+pilot and deployment reporting are not compatible with each other
+not compatible with DMV data
+not compatible with NHTSA data

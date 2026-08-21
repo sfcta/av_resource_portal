@@ -20,44 +20,9 @@ import datetime
 import plotly.express as px
 import plotly.graph_objects as go
 
-INDIR = 'Q:/Model Research/AV_Resource_Portal/data'
+INDIR = 'Q:/Model Research/AV_Resource_Portal/vizdata'
 
 crash_bubble_color = '#c1121f'
-warm_sunset = [
-    '#faa275', # none
-    '#ff8c61', # minor
-    '#ce6a85', # moderate
-    '#985277', # serious
-    '#5c374c', # fatal
-    '#eff1ed', # unknown
-]
-
-warm_sunset_map = {
-    'No Injuries Reported':'#faa275',
-    'Minor':'#ff8c61',
-    'Moderate':'#ce6a85',
-    'Serious':'#985277',
-    'Fatality':'#5c374c',
-    'Unknown':'#eff1ed',
-}
-
-warm_rustic_map = {
-    'No Injuries Reported':'#585123',
-    'Minor':'#eec170',
-    'Moderate':'#f2a65a',
-    'Serious':'#f58549',
-    'Fatality':'#772f1a',
-    'Unknown':'#eff1ed',
-}
-
-coral_map = {
-    'No Injuries Reported':'#ffe3e0',
-    'Minor':'#fbc3bc',
-    'Moderate':'#f7a399',
-    'Serious':'#f38375',
-    'Fatality':'#ef6351',
-    'Unknown':'#eff1ed',
-}
 
 lavender_map = {
     'No Injuries Reported':'#f5e6e8',
@@ -68,35 +33,28 @@ lavender_map = {
     'Unknown':'#eff1ed',
 }
 
+crash = pd.read_csv(Path(INDIR) / 'crashes.csv')
 crash_state = pd.read_csv(Path(INDIR) / 'crash_state.csv')
-crash_city = pd.read_csv(Path(INDIR) / 'crash_city.csv')
-crash_state_sf = pd.read_csv(Path(INDIR) / 'crash_state_sf.csv')
+crash_city = pd.read_csv(Path(INDIR) / 'crash_city_top10.csv')
 crash_sf_sev = pd.read_csv(Path(INDIR) / 'crash_sf_sev.csv')
 crash_sf_comp = pd.read_csv(Path(INDIR) / 'crash_sf_comp.csv')
 crash_ca_comp_sev = pd.read_csv(Path(INDIR) / 'crash_ca_comp_sev.csv')
 crash_geo_sev = pd.read_csv(Path(INDIR) / 'crash_geo_sev.csv')
 crash_geo_comp = pd.read_csv(Path(INDIR) / 'crash_geo_comp.csv')
-crashes_by_month_ca = pd.read_csv(Path(INDIR) / 'crashes_by_month_ca.csv')
-crashes_by_month_sf = pd.read_csv(Path(INDIR) / 'crashes_by_month_sf.csv')
 
 severity_order = ['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']
-
-crash = pd.read_csv(r'Q:\Data\Regulatory\AV\NHTSA\processed\nhtsa_ads_crashes.csv')
-# hotfix
-crash.loc[crash['operating_entity'].eq('Waymo LLlC'), 'operating_entity'] = 'Waymo'
-crash.loc[crash['operating_entity'].eq('Apollo Autonomous Driving USA'), 'operating_entity'] = 'Apollo'
-comp_crashtot_descending = crash.groupby('operating_entity').size().sort_values(ascending=False).index.tolist()
+comp_crashtot_descending = crash.groupby('Company').size().sort_values(ascending=False).index.tolist()
 ```
 
-## Introduction
-The National Highway Transportation Safety Administration (NHTSA) requires companies operating autonomous vehicle (AV) technology to report collisions.
+The National Highway Transportation Safety Administration (NHTSA) requires companies operating autonomous vehicle (AV) technology to report collisions through [Standing General Order 2021-01 (SGO)](https://www.nhtsa.gov/laws-regulations/standing-general-order-crash-reporting). The data in this section 
 
 ## Crashes in the US
-AV Crashes are reported throughout the country, but the largest single concentration is in San Francisco.  
+AV crashes are reported throughout the country, but the largest single concentration is in San Francisco.  
 
 ```{python}
-#| column: page-right
-#| layout-nrow: 1
+#| label: fig-crash-severity
+#| fig-cap: "Crash Severity"
+#| cap-location: margin
 
 fig1 = px.scatter_map(
     crash_geo_sev,
@@ -134,6 +92,13 @@ fig1 = px.scatter_map(
     ]
 )
 
+fig1.show()
+```
+
+```{python}
+#| label: fig-crash-company
+#| fig-cap: "Crashes by Company"
+#| cap-location: top
 
 fig2 = px.scatter_map(
     crash_geo_comp,
@@ -169,7 +134,7 @@ fig2 = px.scatter_map(
     ]
 )
 
-fig1.show()
+
 fig2.show()
 
 ```
@@ -177,29 +142,71 @@ fig2.show()
 San Francisco **alone** has more crashes than any other state besides California, and has the most crashes of any county in California despite being a geographically small county . San Francisco has X as many collisions as Los Angeles despite being roughly 1/100th the area.
 
 ```{python}
-#| column: page-right
-#| layout-nrow: 1
+#| label: fig-crash-state
+#| fig-cap: "Crashes by State"
+#| fig-cap-location: top
+
 
 fig3 = px.bar(
-    crash_state_sf.loc[:,['state_or_city','size']], 
-    x='state_or_city', 
-    y='size', 
-    color='state_or_city',
-    color_discrete_sequence=[
-        '#d6d6d6', #'#d4c5de',
-        '#ffd100',#'#e95e50',
-    ] + 17 * ['#d6d6d6'],
+    crash_state.loc[:,['State','San Francisco','Crashes']], 
+    x='State', 
+    y='Crashes', 
+    color='San Francisco',
+    color_discrete_map={
+        '0':'#dbddde',
+        '1':'#ff6d66'
+    }
 )
 
-#| title: Crashes by City
+fig3.update_layout(
+    showlegend=False,
+    yaxis_title=None,
+    xaxis_title=None,
+)
+
+ca = crash_state[crash_state['State'] == 'CA'].copy()
+bottom = 100
+
+for _, row in ca.iterrows():
+    fig3.add_annotation(
+        dict(
+            x=0.5,
+            y=bottom + row['Crashes'] / 2,
+            ax=100,
+            ay=-10 if row['San Francisco'] == '0' else None,
+            text='San Francisco' if row['San Francisco'] == '1'
+                 else 'Rest of California',
+            showarrow=True,
+            arrowhead=2, #4
+            arrowwidth=2,
+            font=dict(color='#ff5c55' if row['San Francisco'] == '1'
+                else '#aaaaaa',
+                weight='bold'
+                ),
+            arrowcolor='#ff5c55' if row['San Francisco'] == '1'
+                else '#aaaaaa',
+        )
+    )
+    bottom += (row['Crashes'] - 100)
+
+fig3.show()
+```
+
+```{python}
+#| label: fig-crash-city
+#| fig-cap: "Crashes by City"
+#| cap-location: top
 
 fig4 = px.pie(
     crash_city,
-    names='city_top10',
-    values='size'
+    names='City',
+    values='Crashes'
 )
 
-fig3.show()
+fig4.update_layout(
+    yaxis_title=None,
+    xaxis_title=None,
+)
 fig4.show()
 ```
 
@@ -215,21 +222,21 @@ Most crashes result in no injury.  Waymo, the only company operating commercial 
 
 
 crash_disp = (
-    crash.loc[crash['city'].eq('San Francisco')]
-    .groupby(['operating_entity','highest_injury_severity_alleged_legacy'], as_index=False)
+    crash.loc[crash['City'].eq('San Francisco')]
+    .groupby(['Company','Injury Severity'], as_index=False)
     .size()
     .sort_values(by='size',ascending=False)
-    .rename(columns={'size':'crashes'})
+    .rename(columns={'size':'Crashes'})
 )
 
 
 fig5 = px.bar(
     crash_disp,
-    x='operating_entity',
-    y='crashes',
-    color='highest_injury_severity_alleged_legacy',
+    x='Company',
+    y='Crashes',
+    color='Injury Severity',
     color_discrete_map= lavender_map,
-    category_orders = {'highest_injury_severity_alleged_legacy':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
+    category_orders = {'Injury Severity':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
 )
 
 fig5.show()
@@ -240,20 +247,20 @@ fig5.show()
 ```{python}
 
 crash_disp = (
-    crash.loc[crash['city'].eq('Los Angeles')]
-    .groupby(['operating_entity','highest_injury_severity_alleged_legacy'], as_index=False)
+    crash.loc[crash['City'].eq('Los Angeles')]
+    .groupby(['Company','Injury Severity'], as_index=False)
     .size()
     .sort_values(by='size',ascending=False)
-    .rename(columns={'size':'crashes'})
+    .rename(columns={'size':'Crashes'})
 )
 
 figX = px.bar(
     crash_disp,
-    x='operating_entity',
-    y='crashes',
-    color='highest_injury_severity_alleged_legacy',
+    x='Company',
+    y='Crashes',
+    color='Injury Severity',
     color_discrete_map= lavender_map,
-    category_orders = {'highest_injury_severity_alleged_legacy':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
+    category_orders = {'Injury Severity':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
 )
 figX.show()
 ```
@@ -264,29 +271,29 @@ figX.show()
 
 
 crash_disp = (
-    crash.loc[crash['state'].eq('CA')]
-    .groupby(['operating_entity','highest_injury_severity_alleged_legacy'], as_index=False)
+    crash.loc[crash['State'].eq('CA')]
+    .groupby(['Company','Injury Severity'], as_index=False)
     .size()
     .sort_values(by='size',ascending=False)
-    .rename(columns={'size':'crashes'})
+    .rename(columns={'size':'Crashes'})
 )
 
-top5 = crash_disp.groupby(['operating_entity']).agg({'crashes':'sum'}).sort_values(by=['crashes'], ascending=False).index[0:5]
+top5 = crash_disp.groupby(['Company']).agg({'Crashes':'sum'}).sort_values(by=['Crashes'], ascending=False).index[0:5]
 
-crash_disp.loc[~crash_disp['operating_entity'].isin(top5), 'operating_entity'] = "All Others"
+crash_disp.loc[~crash_disp['Company'].isin(top5), 'Company'] = "All Others"
 crash_disp = (
-    crash_disp.groupby(['operating_entity','highest_injury_severity_alleged_legacy'], as_index=False)
-    .agg({'crashes':'sum'})
-    .sort_values(by='crashes',ascending=False)
+    crash_disp.groupby(['Company','Injury Severity'], as_index=False)
+    .agg({'Crashes':'sum'})
+    .sort_values(by='Crashes',ascending=False)
 )
 
 fig6 = px.bar(
     crash_disp,
-    x='operating_entity',
-    y='crashes',
-    color='highest_injury_severity_alleged_legacy',
+    x='Company',
+    y='Crashes',
+    color='Injury Severity',
     color_discrete_map= lavender_map,
-    category_orders = {'highest_injury_severity_alleged_legacy':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
+    category_orders = {'Injury Severity':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
 )
 fig6.show()
 ```
@@ -297,28 +304,28 @@ fig6.show()
 
 
 crash_disp = (
-    crash.groupby(['operating_entity','highest_injury_severity_alleged_legacy'], as_index=False)
+    crash.groupby(['Company','Injury Severity'], as_index=False)
     .size()
     .sort_values(by='size',ascending=False)
-    .rename(columns={'size':'crashes'})
+    .rename(columns={'size':'Crashes'})
 )
 
-top5 = crash_disp.groupby(['operating_entity']).agg({'crashes':'sum'}).sort_values(by=['crashes'], ascending=False).index[0:5]
+top5 = crash_disp.groupby(['Company']).agg({'Crashes':'sum'}).sort_values(by=['Crashes'], ascending=False).index[0:5]
 
-crash_disp.loc[~crash_disp['operating_entity'].isin(top5), 'operating_entity'] = "All Others"
+crash_disp.loc[~crash_disp['Company'].isin(top5), 'Company'] = "All Others"
 crash_disp = (
-    crash_disp.groupby(['operating_entity','highest_injury_severity_alleged_legacy'], as_index=False)
-    .agg({'crashes':'sum'})
-    .sort_values(by='crashes',ascending=False)
+    crash_disp.groupby(['Company','Injury Severity'], as_index=False)
+    .agg({'Crashes':'sum'})
+    .sort_values(by='Crashes',ascending=False)
 )
 
 fig7 = px.bar(
     crash_disp,
-    x='operating_entity',
-    y='crashes',
-    color='highest_injury_severity_alleged_legacy',
+    x='Company',
+    y='Crashes',
+    color='Injury Severity',
     color_discrete_map= lavender_map,
-    category_orders = {'highest_injury_severity_alleged_legacy':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
+    category_orders = {'Injury Severity':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
 )
 fig7.show()
 ```

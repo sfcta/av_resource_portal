@@ -12,10 +12,8 @@ reference-location: margin
 citation-location: margin
 ---
 
-## Introduction
-The data used in the AV Resource Portal is from public versions of data released by the California Department of Motor Vehicles (DMV), California Public Utilities Commission (CPUC), and National Highway Transportation Safety Administration (NHTSA).
-
 ## Data Sources
+The data used in the AV Resource Portal is from public versions of data released by the California Department of Motor Vehicles (DMV), California Public Utilities Commission (CPUC), and National Highway Transportation Safety Administration (NHTSA).
 
 ### National Highway Transportation Safety Administration
 NHTSA's [Standing General Order (SGO)](https://www.nhtsa.gov/sites/nhtsa.gov/files/2025-04/third-amended-SGO-2021-01_2025.pdf) is the most comprehensive source of AV collision data in the United States.  The third amendment to the SGO changed the data schema and the requirements specifying which events must be reported, but the new version is largely compatible with the legacy data.

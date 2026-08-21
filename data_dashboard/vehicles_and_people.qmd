@@ -20,11 +20,10 @@ import datetime
 import plotly.express as px
 import plotly.graph_objects as go
 
+styles = {}
 color_set_a = ['#ff5e5b', '#00cecb', '#ffed66', '#ffffea', '#d8d8d8']
 light_color_set_a = ['#ff9e9d', '#64e4e2', '#fff4a3', '#fffff2', '#e8e8e8']
-
 color_set_b = ['#FFC857','#E9724C','#C5283D','#481D24','#255F85']
-
 color_set_c = ['#0cb2af','#a1c65d','#fac723','#f29222','#e95e50','#936fac']
 color_set_c_light = ['#87f7f5','#d9e8be','#fde9a7','#fad3a7','#f6bfb9','#d4c5de']
 color_set_d = ['#264653','#287271','#2a9d8f','#e9c46a','#f4a261','#e76f51']
@@ -103,13 +102,9 @@ period_vmt = pd.read_csv(Path(INDIR) / 'deployment_period_vmt.csv')
 
 ```
 
-## Introduction
-The first Autonomous Vehicle (AV) testing permits were issued by the California Department of Motor Vehicles (DMV) in 2018 to companies testing without safety drivers.  The first driverless deployment permit was issued to Waymo in 2021.  Until this year (2026), a company operating under a deployment permit was not required to report any data to the DMV.  The California Public Utilities Commission (CPUC), which regulates AV passenger services like Waymo and Zoox, began issuing AV pilot permits in XXXX and deployment permits in 2022.
-
-The AV Resource Page's Vehicles and People section uses data from 
-
-- DMV
-- CPUC
+::: {.callout-important}
+The AV Resource Portal's Data Dashboard was intended to show what publicly available data says about Autonomous Vehicle (AV) operations in San Francisco.  However, as described further in the Transparency section, limitations in the way data reports are designed, and redactions made by AV companies under privacy or confidential business information claims prevent the ability to present San Francisco data in most cases.  
+:::
 
 ## Vehicle Miles Traveled
 
@@ -144,9 +139,10 @@ fig4.show()
 
 ### Passenger Service and Deadheading
 AV passenger services drive around empty in between trips.  This is called deadheading.  The CPUC categorizes passenger service into 3 phases: 
-1. A vehicle is empty and waiting for a passenger to request a ride
-2. Driving to pick up a passenger
-3. Transporting the passenger.  
+
+- Phase 1. A vehicle is empty and waiting for a passenger to request a ride
+- Phase 2. Driving to pick up a passenger
+- Phase 3. Transporting the passenger.  
 
 Data by phase of service is reported to CPUC by companies operating under deployment permits.  Waymo is the only company currently operating driverless deployment passenger service.  Their VMT throughout California has grown consistently over time with only a few notable dips.  Cruise briefly operated driverless deployment passenger service before their permit was suspended and eventually revoked.  
 
