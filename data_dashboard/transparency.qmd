@@ -4,13 +4,15 @@ execute:
     echo: false
 format: 
     html:
-        toc: true
-        toc-depth: 4
         page-layout: article
         title-block-banner: true
 reference-location: margin
 citation-location: margin
 ---
+
+::: {.callout-important}
+The publicly available data used in the AV Resource Portal Data Dashboard limits the analysis and information presented due to the design of the data reports and redactions made by AV companies under confidential business information claims. Please see [Transparency](.\data_dashboard\transparency.html) for more information.
+:::
 
 ## Data Sources
 The data used in the AV Resource Portal is from public versions of data released by the California Department of Motor Vehicles (DMV), California Public Utilities Commission (CPUC), and National Highway Transportation Safety Administration (NHTSA).

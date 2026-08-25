@@ -29,12 +29,12 @@ website:
 
 format:
   html:
-    smooth-scroll: true
+    toc: false
     theme:
       - cosmo
       - brand
     css: styles.css
-    toc: false
+    
 
 
 

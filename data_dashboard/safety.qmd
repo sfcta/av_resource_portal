@@ -4,12 +4,15 @@ execute:
     echo: false
 format: 
     html:
-        toc: true
-        toc-depth: 4
         page-layout: article
         title-block-banner: true
+        grid:
+            sidebar-width: 200px
+            body-width: 900px
+            margin-width: 300px
 reference-location: margin
 citation-location: margin
+fig-cap-location: top
 ---
 
 
@@ -33,6 +36,20 @@ lavender_map = {
     'Unknown':'#eff1ed',
 }
 
+injury_severity_map = {
+    'No Injuries Reported':'#e6e6e6',
+    'Minor':'#ffb095',
+    'Moderate':'#ff6d66',
+    'Serious':'#c41d4a',
+    'Fatality':'#720006',
+    'Unknown':'#e6e6e6',
+}
+
+all_others_combined_bgcolor='#e6e6e6'
+all_others_combined_fgcolor='#747373'
+unknown_inj_hash_color = '#c41d4a'
+
+
 crash = pd.read_csv(Path(INDIR) / 'crashes.csv')
 crash_state = pd.read_csv(Path(INDIR) / 'crash_state.csv')
 crash_city = pd.read_csv(Path(INDIR) / 'crash_city_top10.csv')
@@ -42,19 +59,25 @@ crash_ca_comp_sev = pd.read_csv(Path(INDIR) / 'crash_ca_comp_sev.csv')
 crash_geo_sev = pd.read_csv(Path(INDIR) / 'crash_geo_sev.csv')
 crash_geo_comp = pd.read_csv(Path(INDIR) / 'crash_geo_comp.csv')
 
+# fix data type, needs to be str for discrete_color_map
+crash_state['San Francisco'] = crash_state['San Francisco'].astype(str)
 severity_order = ['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']
 comp_crashtot_descending = crash.groupby('Company').size().sort_values(ascending=False).index.tolist()
 ```
 
-The National Highway Transportation Safety Administration (NHTSA) requires companies operating autonomous vehicle (AV) technology to report collisions through [Standing General Order 2021-01 (SGO)](https://www.nhtsa.gov/laws-regulations/standing-general-order-crash-reporting). The data in this section 
+::: {.callout-important}
+The publicly available data used in the AV Resource Portal Data Dashboard limits the analysis and information presented due to the design of the data reports and redactions made by AV companies under confidential business information claims. Please see [Transparency](.\data_dashboard\transparency.html) for more information.
+
+Safety analysis uses collision rates, often specified as incidents per million or hundred-million miles, to track trends over time and to make comparisons between different modes, cities, times of day, or other factors. Data limitations prevent aligning collisions and mileage, or even from knowing the total mileage of any AV company's fleet, and as a consequence prevent showing collision rates. 
+:::
+
+This section presents collision data from the National Highway Transportation Safety Administration (NHTSA) [Standing General Order 2021-01 (SGO)](https://www.nhtsa.gov/laws-regulations/standing-general-order-crash-reporting).  
 
 ## Crashes in the US
-AV crashes are reported throughout the country, but the largest single concentration is in San Francisco.  
 
 ```{python}
 #| label: fig-crash-severity
 #| fig-cap: "Crash Severity"
-#| cap-location: margin
 
 fig1 = px.scatter_map(
     crash_geo_sev,
@@ -95,10 +118,13 @@ fig1 = px.scatter_map(
 fig1.show()
 ```
 
+::: {.column-margin}
+AV crashes are reported throughout the country, but the largest single concentration is in San Francisco. Most result in no injury, but there are cases of injuries and fatalities.
+:::
+
 ```{python}
 #| label: fig-crash-company
 #| fig-cap: "Crashes by Company"
-#| cap-location: top
 
 fig2 = px.scatter_map(
     crash_geo_comp,
@@ -139,13 +165,14 @@ fig2.show()
 
 ```
 
-San Francisco **alone** has more crashes than any other state besides California, and has the most crashes of any county in California despite being a geographically small county . San Francisco has X as many collisions as Los Angeles despite being roughly 1/100th the area.
+::: {.column-margin}
+Waymo has more collisions than any other AV company, but numerous AV companies are involved in collisions across the country.
+:::
+
 
 ```{python}
 #| label: fig-crash-state
 #| fig-cap: "Crashes by State"
-#| fig-cap-location: top
-
 
 fig3 = px.bar(
     crash_state.loc[:,['State','San Francisco','Crashes']], 
@@ -192,6 +219,13 @@ for _, row in ca.iterrows():
 fig3.show()
 ```
 
+::: {.column-margin}
+
+San Francisco **alone** has more crashes than any the rest of California, or other state, despite having an area less than 50 square miles.
+
+:::
+
+
 ```{python}
 #| label: fig-crash-city
 #| fig-cap: "Crashes by City"
@@ -200,18 +234,27 @@ fig3.show()
 fig4 = px.pie(
     crash_city,
     names='City',
-    values='Crashes'
+    values='Crashes',
+    color_discrete_sequence=['#636efa','#b6baf0'] * (int(len(crash_city) / 2) +1)
 )
 
 fig4.update_layout(
     yaxis_title=None,
     xaxis_title=None,
 )
+
+fig4.update_traces(
+    dict(marker_pattern_bgcolor=all_others_combined_bgcolor,
+         marker_pattern_fgcolor=all_others_combined_fgcolor,
+         marker_pattern_shape='/',
+        ),
+    selector=({'legendgroup':'All Others Combined'}),
+)
+
 fig4.show()
 ```
 
 ## Crashes in San Francisco
-Most crashes result in no injury.  Waymo, the only company operating commercial AV passenger service under a deployment permit, has the most crashes.  Cruise, which also briefly operated commercial AV passenger service under a deployment permit, follows with the second-most number of crashes
 
 :::{.column-body} 
 :::{.panel-tabset}
@@ -219,7 +262,9 @@ Most crashes result in no injury.  Waymo, the only company operating commercial 
 ## San Francisco
 
 ```{python}
-
+#| label: fig-crash-sf
+#| fig-cap: "Crashes in San Francisco"
+#| cap-location: top
 
 crash_disp = (
     crash.loc[crash['City'].eq('San Francisco')]
@@ -235,16 +280,25 @@ fig5 = px.bar(
     x='Company',
     y='Crashes',
     color='Injury Severity',
-    color_discrete_map= lavender_map,
+    color_discrete_map= injury_severity_map,
     category_orders = {'Injury Severity':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
 )
 
+fig5.update_traces(
+    dict(marker_pattern_fgcolor=unknown_inj_hash_color,
+         marker_pattern_shape='/',
+        ),
+    selector=({'legendgroup':'Unknown'}),
+)
 fig5.show()
 ```
 
 ## Los Angeles
 
 ```{python}
+#| label: fig-crash-la
+#| fig-cap: "Crashes in Los Angeles"
+#| cap-location: top
 
 crash_disp = (
     crash.loc[crash['City'].eq('Los Angeles')]
@@ -254,57 +308,36 @@ crash_disp = (
     .rename(columns={'size':'Crashes'})
 )
 
-figX = px.bar(
-    crash_disp,
-    x='Company',
-    y='Crashes',
-    color='Injury Severity',
-    color_discrete_map= lavender_map,
-    category_orders = {'Injury Severity':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
-)
-figX.show()
-```
-
-## California
-
-```{python}
-
-
-crash_disp = (
-    crash.loc[crash['State'].eq('CA')]
-    .groupby(['Company','Injury Severity'], as_index=False)
-    .size()
-    .sort_values(by='size',ascending=False)
-    .rename(columns={'size':'Crashes'})
-)
-
-top5 = crash_disp.groupby(['Company']).agg({'Crashes':'sum'}).sort_values(by=['Crashes'], ascending=False).index[0:5]
-
-crash_disp.loc[~crash_disp['Company'].isin(top5), 'Company'] = "All Others"
-crash_disp = (
-    crash_disp.groupby(['Company','Injury Severity'], as_index=False)
-    .agg({'Crashes':'sum'})
-    .sort_values(by='Crashes',ascending=False)
-)
-
 fig6 = px.bar(
     crash_disp,
     x='Company',
     y='Crashes',
     color='Injury Severity',
-    color_discrete_map= lavender_map,
+    color_discrete_map= injury_severity_map,
     category_orders = {'Injury Severity':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
 )
+
+fig6.update_traces(
+    dict(marker_pattern_fgcolor=unknown_inj_hash_color,
+         marker_pattern_shape='/',
+         opacity=0.75
+        ),
+    selector=({'legendgroup':'Unkown'}),
+)
+
 fig6.show()
 ```
 
-## United States
+## California
 
 ```{python}
-
+#| label: fig-crash-ca
+#| fig-cap: "Crashes in California"
+#| cap-location: top
 
 crash_disp = (
-    crash.groupby(['Company','Injury Severity'], as_index=False)
+    crash.loc[crash['State'].eq('CA')]
+    .groupby(['Company','Injury Severity'], as_index=False)
     .size()
     .sort_values(by='size',ascending=False)
     .rename(columns={'size':'Crashes'})
@@ -324,12 +357,68 @@ fig7 = px.bar(
     x='Company',
     y='Crashes',
     color='Injury Severity',
-    color_discrete_map= lavender_map,
+    color_discrete_map= injury_severity_map,
     category_orders = {'Injury Severity':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
 )
+
+fig7.update_traces(
+    dict(marker_pattern_fgcolor=unknown_inj_hash_color,
+         marker_pattern_shape='/',
+         opacity=0.75
+        ),
+    selector=({'legendgroup':'Unkown'}),
+)
+
 fig7.show()
+```
+
+## United States
+
+```{python}
+#| label: fig-crash-us
+#| fig-cap: "Crashes in the United States"
+#| cap-location: top
+
+crash_disp = (
+    crash.groupby(['Company','Injury Severity'], as_index=False)
+    .size()
+    .sort_values(by='size',ascending=False)
+    .rename(columns={'size':'Crashes'})
+)
+
+top5 = crash_disp.groupby(['Company']).agg({'Crashes':'sum'}).sort_values(by=['Crashes'], ascending=False).index[0:5]
+
+crash_disp.loc[~crash_disp['Company'].isin(top5), 'Company'] = "All Others"
+crash_disp = (
+    crash_disp.groupby(['Company','Injury Severity'], as_index=False)
+    .agg({'Crashes':'sum'})
+    .sort_values(by='Crashes',ascending=False)
+)
+
+fig8 = px.bar(
+    crash_disp,
+    x='Company',
+    y='Crashes',
+    color='Injury Severity',
+    color_discrete_map= injury_severity_map,
+    category_orders = {'Injury Severity':['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']}
+)
+
+fig8.update_traces(
+    dict(marker_pattern_fgcolor=unknown_inj_hash_color,
+         marker_pattern_shape='/',
+         opacity=0.75
+        ),
+    selector=({'legendgroup':'Unkown'}),
+)
+
+fig8.show()
 ```
 
 :::
 
+:::
+
+::: {.column-margin}
+Most crashes result in no injury.  Waymo, the only company operating commercial AV passenger service under a deployment permit, has the most crashes.  Cruise, which also briefly operated commercial AV passenger service under a deployment permit, follows with the second-most number of crashes
 :::
