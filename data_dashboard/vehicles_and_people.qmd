@@ -7,9 +7,7 @@ format:
         page-layout: article
         title-block-banner: true
         grid:
-            sidebar-width: 200px
             body-width: 900px
-            margin-width: 300px
 reference-location: margin
 citation-location: margin
 fig-cap-location: top
@@ -24,39 +22,57 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 styles = {}
-color_set_a = ['#ff5e5b', '#00cecb', '#ffed66', '#ffffea', '#d8d8d8']
-light_color_set_a = ['#ff9e9d', '#64e4e2', '#fff4a3', '#fffff2', '#e8e8e8']
-color_set_b = ['#FFC857','#E9724C','#C5283D','#481D24','#255F85']
+#color_set_a = ['#ff5e5b', '#00cecb', '#ffed66', '#ffffea', '#d8d8d8']
+#light_color_set_a = ['#ff9e9d', '#64e4e2', '#fff4a3', '#fffff2', '#e8e8e8']
+#color_set_b = ['#FFC857','#E9724C','#C5283D','#481D24','#255F85']
 color_set_c = ['#0cb2af','#a1c65d','#fac723','#f29222','#e95e50','#936fac']
 color_set_c_light = ['#87f7f5','#d9e8be','#fde9a7','#fad3a7','#f6bfb9','#d4c5de']
-color_set_d = ['#264653','#287271','#2a9d8f','#e9c46a','#f4a261','#e76f51']
+#color_set_d = ['#264653','#287271','#2a9d8f','#e9c46a','#f4a261','#e76f51']
 
 waymo_testing_color = '#82c1ff'
 waymo_deployment_color = '#0583ff'
 cruise_testing_color = '#ffa69b'
 cruise_deployment_color = '#ff4d37'
 zoox_testing_color = '#89d1c6'
-zoox_deployment_color = '#16B79C' # approx from eyedropper
+zoox_deployment_color = '#1ac9ac' # approx from eyedropper
+other_testing_color = '#dbddde'
+other_deployment_color = '#878788' # approx from eyedropper
+
+waymo_sf_color = '#0583ff'
+waymo_la_color = '#82c1ff'
+waymo_sm_color = '#3d9eff'
+waymo_un_color = '#dbddde'
+cruise_sf_color = '#ff4d37'
+cruise_un_color = '#878788'
+unknown_hash_color = '#c41d4a'
+
+
+drive_alone_color = '#264653'
+bus_color = '#287271'
+
+period1_color = '#9fcfca'
+period2_color = '#51a59d'
+period3_color = '#006b68'
 
 company_permit_type_color_map = {
-    'Waymo DMV Testing Drivered':light_color_set_a[0],
-    'Waymo DMV Testing Driverless':light_color_set_a[0],
-    'Waymo CPUC Deployment Drivered':color_set_a[0],
-    'Waymo CPUC Deployment Driverless':color_set_a[0],
-    'Cruise DMV Testing Drivered':light_color_set_a[1],
-    'Cruise DMV Testing Driverless':light_color_set_a[1],
-    'Cruise CPUC Deployment Drivered':color_set_a[1],
-    'Cruise CPUC Deployment Driverless':color_set_a[1],
-    'Zoox DMV Testing Drivered':light_color_set_a[2],
-    'Zoox DMV Testing Driverless':light_color_set_a[2],
-    'Zoox CPUC Deployment Drivered':color_set_a[2],
-    'Zoox CPUC Deployment Driverless':color_set_a[2],
-    'All Others Combined DMV Testing Drivered':light_color_set_a[3],
-    'All Others Combined DMV Testing Driverless':light_color_set_a[3],
-    'All Others Combined CPUC Deployment Drivered':color_set_a[3],
-    'All Others Combined CPUC Deployment Driverless':color_set_a[3],
-    'Drive alone':color_set_d[0],
-    'Bus':color_set_d[1],
+    'Waymo DMV Testing Drivered':waymo_testing_color,
+    'Waymo DMV Testing Driverless':waymo_testing_color,
+    'Waymo CPUC Deployment Drivered':waymo_deployment_color,
+    'Waymo CPUC Deployment Driverless':waymo_deployment_color,
+    'Cruise DMV Testing Drivered':cruise_testing_color,
+    'Cruise DMV Testing Driverless':cruise_testing_color,
+    'Cruise CPUC Deployment Drivered':cruise_deployment_color,
+    'Cruise CPUC Deployment Driverless':cruise_deployment_color,
+    'Zoox DMV Testing Drivered':zoox_testing_color,
+    'Zoox DMV Testing Driverless':zoox_testing_color,
+    'Zoox CPUC Deployment Drivered':zoox_deployment_color,
+    'Zoox CPUC Deployment Driverless':zoox_deployment_color,
+    'All Others Combined DMV Testing Drivered':other_testing_color,
+    'All Others Combined DMV Testing Driverless':other_testing_color,
+    'All Others Combined CPUC Deployment Drivered':other_deployment_color,
+    'All Others Combined CPUC Deployment Driverless':other_deployment_color,
+    'Drive alone':drive_alone_color,
+    'Bus':bus_color,
 }
 company_permit_type_dash_map = {
     'Waymo DMV Testing Drivered':'dot',
@@ -80,26 +96,18 @@ company_permit_type_dash_map = {
 }
 
 company_county_color_map = {
-    'Waymo San Francisco':color_set_c[0],
-    'Waymo Los Angeles':color_set_c[1],
-    'Waymo San Mateo':color_set_c[2],
-    'Cruise San Francisco':color_set_c[3],
-    'Waymo Unidentified':color_set_c[4],
+    'Waymo San Francisco': waymo_sf_color, #color_set_c[0],
+    'Waymo Los Angeles': waymo_la_color, #color_set_c[1],
+    'Waymo San Mateo': waymo_sm_color, #color_set_c[2],
+    'Cruise San Francisco': cruise_sf_color, #color_set_c[3],
+    'Cruise Unidentified': cruise_un_color, 
+    'Waymo Unidentified': waymo_un_color, # color_set_c[4],
 }
 
-company_county_pattern_map = {
-    'Waymo San Francisco (Drivered)':'/',
-    'Waymo San Francisco (Driverless)':None,
-    'Waymo Los Angeles (Drivered)':'/',
-    'Waymo Los Angeles (Driverless)':None,
-    'Waymo San Mateo (Drivered)':'/',
-    'Waymo San Mateo (Driverless)':None,
-    'Cruise San Francisco (Drivered)':'/',
-    'Cruise San Francisco (Driverless)':None,
-    'Waymo Unidentified (Drivered)':'/',
-    'Waymo Unidentified (Driverless)':None,
-    'Cruise Unidentified (Drivered)':'/',
-    'Cruise Unidentified (Driverless)':None,
+period_color_map = {
+    'Period 1': period1_color,
+    'Period 2': period2_color,
+    'Period 3': period3_color,
 }
 
 INDIR = 'Q:/Model Research/AV_Resource_Portal/vizdata'
@@ -110,7 +118,7 @@ period_vmt = pd.read_csv(Path(INDIR) / 'deployment_period_vmt.csv')
 ```
 
 ::: {.callout-important}
-The publicly available data used in the AV Resource Portal Data Dashboard limits the analysis and information presented due to the design of the data reports and redactions made by AV companies under confidential business information claims. Please see [Transparency](.\data_dashboard\transparency.html) for more information. 
+The publicly available data used in the AV Resource Portal Data Dashboard limits the analysis and information presented due to the design of the data reports and redactions made by AV companies under confidential business information claims. Please see [Transparency](./transparency.html) for more information. 
 
 This section primarily reports statewide values due to the limitations noted above. 
 :::
@@ -163,6 +171,7 @@ fig5 = px.area(
     y='period_vmt',
     facet_col='company',
     color='period',
+    color_discrete_map=period_color_map,
 )
 fig5.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 
@@ -310,7 +319,7 @@ fig3 = px.bar(
     color='label',
     color_discrete_map=company_county_color_map,
 ).update_traces(
-    dict(marker_pattern_fgcolor=color_set_c_light[4],
+    dict(marker_pattern_fgcolor=unknown_hash_color,
          marker_pattern_shape='/',
          opacity=0.75
         ),
@@ -364,6 +373,10 @@ Waymo began redacting tract-level trip data in the first quarter of 2025. The ma
 Waymo is currently the only company with approval to provide paid passenger service in California.
 :::
 
+::: {.callout-important}
+Waymo reported tract-level data using 2010 Census Tract definitions, while Cruise used 2020 Census Tract definitions.  To preserve accuracy, and because Waymo reported orders of magnitude more trips than Cruise, Cruise trips were re-apportioned from 2020 Census Tracts to 2010 Census Tracts in this map.
+:::
+
 :::
 
 ```{=html}
@@ -375,12 +388,3 @@ Waymo is currently the only company with approval to provide paid passenger serv
 </div>
 ```
 
-::: {.column-margin}
-
-::: {.callout-important}
-Waymo began redacting tract-level trip data in the first quarter of 2025. The maps below only contain data up until December 2024.
-
-Waymo is currently the only company with approval to provide paid passenger service in California.
-:::
-
-:::

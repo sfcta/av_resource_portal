@@ -11,7 +11,7 @@ citation-location: margin
 ---
 
 ::: {.callout-important}
-The publicly available data used in the AV Resource Portal Data Dashboard limits the analysis and information presented due to the design of the data reports and redactions made by AV companies under confidential business information claims. Please see [Transparency](.\data_dashboard\transparency.html) for more information.
+The publicly available data used in the AV Resource Portal Data Dashboard limits the analysis and information presented due to the design of the data reports and redactions made by AV companies under confidential business information claims. Please see [Transparency](./transparency.html) for more information.
 :::
 
 ## Data Sources
@@ -49,8 +49,11 @@ Deployment data is heavily redacted.
 [source](https://www.cpuc.ca.gov/regulatory-services/licensing/transportation-licensing-and-analysis-branch/autonomous-vehicle-programs/quarterly-reporting)
 
 ## Interoperability and Challenges
-[TODO]
+The [vehicles and people](./vehicles_and_people.html) and [safety](./safety.html) pages use callout boxes to identify how data limitations affect the information presented.  
 
-pilot and deployment reporting are not compatible with each other
-not compatible with DMV data
-not compatible with NHTSA data
+Some of the key issues are:
+
+- The CPUC's quarterly pilot reports are structured differently and are incompatible with the quarterly deployment reports
+- CPUC and DMV reports can only be aligned at the statewide, monthly level
+- DMV reports are only available through November 2025
+- Neither the CPUC nor DMV reports can be aligned with NHTSA data for safety analysis

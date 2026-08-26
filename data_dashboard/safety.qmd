@@ -7,9 +7,7 @@ format:
         page-layout: article
         title-block-banner: true
         grid:
-            sidebar-width: 200px
             body-width: 900px
-            margin-width: 300px
 reference-location: margin
 citation-location: margin
 fig-cap-location: top
@@ -43,6 +41,7 @@ injury_severity_map = {
     'Serious':'#c41d4a',
     'Fatality':'#720006',
     'Unknown':'#e6e6e6',
+    'Total':crash_bubble_color,
 }
 
 all_others_combined_bgcolor='#e6e6e6'
@@ -66,7 +65,7 @@ comp_crashtot_descending = crash.groupby('Company').size().sort_values(ascending
 ```
 
 ::: {.callout-important}
-The publicly available data used in the AV Resource Portal Data Dashboard limits the analysis and information presented due to the design of the data reports and redactions made by AV companies under confidential business information claims. Please see [Transparency](.\data_dashboard\transparency.html) for more information.
+The publicly available data used in the AV Resource Portal Data Dashboard limits the analysis and information presented due to the design of the data reports and redactions made by AV companies under confidential business information claims. Please see [Transparency](./transparency.html) for more information.
 
 Safety analysis uses collision rates, often specified as incidents per million or hundred-million miles, to track trends over time and to make comparisons between different modes, cities, times of day, or other factors. Data limitations prevent aligning collisions and mileage, or even from knowing the total mileage of any AV company's fleet, and as a consequence prevent showing collision rates. 
 :::
@@ -99,7 +98,8 @@ fig1 = px.scatter_map(
         dict(
             buttons=list([
                 dict(
-                    args=[{"marker.size":crash_geo_sev[severity].to_numpy()}],
+                    args=[{"marker.size":crash_geo_sev[severity].to_numpy(),
+                           "marker.color":injury_severity_map[severity]}],
                     label=severity,
                     method="restyle",
                 ) for severity in ['Total'] + severity_order
@@ -120,6 +120,11 @@ fig1.show()
 
 ::: {.column-margin}
 AV crashes are reported throughout the country, but the largest single concentration is in San Francisco. Most result in no injury, but there are cases of injuries and fatalities.
+
+::: {.callout-important}
+Safety performance across cities should be compared using crash rates rather than number of crashes. However, due to data limiations crash rates cannot be calculated.
+:::
+
 :::
 
 ```{python}
@@ -167,6 +172,11 @@ fig2.show()
 
 ::: {.column-margin}
 Waymo has more collisions than any other AV company, but numerous AV companies are involved in collisions across the country.
+
+::: {.callout-important}
+Safety performance across companies should be compared using crash rates rather than number of crashes. However, due to data limiations crash rates cannot be calculated.
+:::
+
 :::
 
 
@@ -223,8 +233,11 @@ fig3.show()
 
 San Francisco **alone** has more crashes than any the rest of California, or other state, despite having an area less than 50 square miles.
 
+::: {.callout-important}
+Safety performance across states should be compared using crash rates rather than number of crashes. However, due to data limiations crash rates cannot be calculated.
 :::
 
+:::
 
 ```{python}
 #| label: fig-crash-city
@@ -253,6 +266,16 @@ fig4.update_traces(
 
 fig4.show()
 ```
+
+::: {.column-margin}
+
+Nearly 42% of all collisions occur in San Francisco, more than 3x Los Angeles, the city with the next-highest number of collisions.
+
+::: {.callout-important}
+Safety performance across cities should be compared using crash rates rather than number of crashes. However, due to data limiations crash rates cannot be calculated.
+:::
+
+:::
 
 ## Crashes in San Francisco
 
@@ -421,4 +444,9 @@ fig8.show()
 
 ::: {.column-margin}
 Most crashes result in no injury.  Waymo, the only company operating commercial AV passenger service under a deployment permit, has the most crashes.  Cruise, which also briefly operated commercial AV passenger service under a deployment permit, follows with the second-most number of crashes
+
+::: {.callout-important}
+Safety performance across companies should be compared using crash rates rather than number of crashes. However, due to data limiations crash rates cannot be calculated.
+:::
+
 :::
