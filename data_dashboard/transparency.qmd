@@ -11,11 +11,11 @@ citation-location: margin
 ---
 
 ::: {.callout-important}
-The publicly available data used in the AV Resource Portal Data Dashboard limits the analysis and information presented due to the design of the data reports and redactions made by AV companies under confidential business information claims. Please see [Transparency](./transparency.html) for more information.
+San Francisco is a prominent center of Autonomous Vehicle (AV) activity. Data describing AV activity in San Francisco, however, is spread across multiple sources, redacted from public reports, collected with insufficient detail, or in some cases not collected at all. 
 :::
 
 ## Data Sources
-The data used in the AV Resource Portal is from public versions of data released by the California Department of Motor Vehicles (DMV), California Public Utilities Commission (CPUC), and National Highway Transportation Safety Administration (NHTSA).
+The data used in the AV Resource Portal is from public versions of data released by the California Department of Motor Vehicles (California DMV), California Public Utilities Commission (CPUC), and National Highway Transportation Safety Administration (NHTSA).
 
 ### National Highway Transportation Safety Administration
 NHTSA's [Standing General Order (SGO)](https://www.nhtsa.gov/sites/nhtsa.gov/files/2025-04/third-amended-SGO-2021-01_2025.pdf) is the most comprehensive source of AV collision data in the United States.  The third amendment to the SGO changed the data schema and the requirements specifying which events must be reported, but the new version is largely compatible with the legacy data.
@@ -31,20 +31,20 @@ The SGO data may contain multiple records for each individual incident, as compa
 [source](https://www.nhtsa.gov/laws-regulations/standing-general-order-crash-reporting)
 
 ### California Department of Motor Vehicles 
-The DMV recently adopted new regulations, which expand data reporting to include new types of data and, importantly, require companies with deployment permits to report data. Previous regulations only required companies with testing permits to report data.  Because the new regulations recently went into effect, no data under the new requirements has been reported yet.  
+The DMV approved [new regulations](https://www.dmv.ca.gov/portal/vehicle-industry-services/autonomous-vehicles/california-autonomous-vehicle-regulations/) on [April 28, 2026](https://www.dmv.ca.gov/portal/news-and-media/new-autonomous-vehicle-regulations-strengthen-oversight-and-enforcement-authorize-trucks-and-transit/), which expand data reporting to include new types of data and, importantly, require companies with deployment permits to report data. Previous regulations only required companies with testing permits to report data. The first quarterly reports under the new regulations will cover the period July 1, 2026 - September 30, 2026. It is not clear if or when quarterly report data will be made available to the public.
 
-Data under the previous rules was reported annually covering a period of December - November, and typically released the following February.  The reporting cadence results in a long lag in data availability and the data reporting period inhibits interoperability with other data sources.  
+Data under the previous rules was reported annually covering a period of December - November, and typically released the following February.  The reporting cadence results in a long lag in data availability and the data reporting period inhibits interoperability with other data sources. 
 
 VMT data is reported without geographic detail, and prior to new regulations was not reported in deployment at all.  
 
 [source](https://dmvpublicaffairs.wetransfer.com/downloads/e6a196103b7a16801d4acd452cf7e35c20260220222733/70cc0b?t_lsid=e71827f1-358f-4135-a906-b9f4223c5633&t_network=link&t_rid=YXV0aDB8VHJhbnNmZXJ8cGg2MjFxMHI5bmc=&t_s=download_link&t_ts=1771626453)
 
 ### California Public Utilities Commission
-The CPUC collects rudimentary data for companies operating with pilot permits, and much more extensive data for companies operating under deployment permits.  Pilot permittees over XXXXX trips per month are subject to deployment reporting requirements.  
+The CPUC collects rudimentary data for companies operating with pilot permits, and much more extensive data for companies operating under deployment permits.  
 
-Pilot data is submitted in different file formats and data schemas by different companies, making it very difficult to use.  
+Pilot permittees over 300 trips per quarter are subject to deployment reporting requirements. Pilot data is submitted in different file formats and data schemas by different companies, making it very difficult to use.  
 
-Deployment data is heavily redacted.  
+Deployment data is composed of 9 individual reports filed quarterly. These reports are much more comprehensive and detailed than pilot reports, but they are heavily redacted.  
 
 [source](https://www.cpuc.ca.gov/regulatory-services/licensing/transportation-licensing-and-analysis-branch/autonomous-vehicle-programs/quarterly-reporting)
 

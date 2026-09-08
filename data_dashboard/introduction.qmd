@@ -11,11 +11,13 @@ citation-location: margin
 ---
 
 ::: {.callout-important}
-The publicly available data used in the AV Resource Portal Data Dashboard limits the analysis and information presented due to the design of the data reports and redactions made by AV companies under confidential business information claims. Please see [Transparency](./transparency.html) for more information.
+San Francisco is a prominent center of Autonomous Vehicle (AV) activity. Data describing AV activity in San Francisco, however, is spread across multiple sources, redacted from public reports, collected with insufficient detail, or in some cases not collected at all. Please see [Transparency](./transparency.html) for more information.
 :::
 
 ::: {.column-body}
-The first Autonomous Vehicle (AV) testing permits were issued by the California Department of Motor Vehicles (DMV) in 2018 to companies testing without safety drivers.  The first driverless deployment permit was issued to Waymo in 2021.  Until this year (2026), a company operating under a deployment permit was not required to report any data to the DMV.  The California Public Utilities Commission (CPUC), which regulates AV passenger services like Waymo and Zoox, began issuing AV pilot permits in XXXX and deployment permits in 2022.
+San Francisco is a prominent center of Autonomous Vehicle (AV) activity. Data describing AV activity in San Francisco, however, is spread across multiple sources, redacted from public reports, collected with insufficient detail, or in some cases not collected at all. Please see [Transparency](./transparency.html) for more information.
 
-The data used in the AV Resource Portal is from public versions of data released by the California Department of Motor Vehicles (DMV), California Public Utilities Commission (CPUC), and National Highway Transportation Safety Administration (NHTSA).
+This dashboard uses publicly available data collected by the California Department of Motor Vehicles (California DMV), California Public Utilities Commission (CPUC), and National Highway Transportation Safety Administration (NHTSA). Where possible, it provides insights into AV activity in San Francisco, but in many cases only California statewide activity is available. 
+
+The first AV testing permits were issued by the California DMV in 2018 to companies testing without safety drivers.  The first driverless deployment permit was issued to Waymo in 2021.  Until this year (2026), a company operating under a deployment permit was not required to report any data to the DMV.  CPUC, which regulates AV passenger services like Waymo and Zoox, began issuing AV pilot permits in 2018 and deployment permits in 2022.
 :::

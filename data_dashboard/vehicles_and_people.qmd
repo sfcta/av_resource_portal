@@ -22,12 +22,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 styles = {}
-#color_set_a = ['#ff5e5b', '#00cecb', '#ffed66', '#ffffea', '#d8d8d8']
-#light_color_set_a = ['#ff9e9d', '#64e4e2', '#fff4a3', '#fffff2', '#e8e8e8']
-#color_set_b = ['#FFC857','#E9724C','#C5283D','#481D24','#255F85']
 color_set_c = ['#0cb2af','#a1c65d','#fac723','#f29222','#e95e50','#936fac']
 color_set_c_light = ['#87f7f5','#d9e8be','#fde9a7','#fad3a7','#f6bfb9','#d4c5de']
-#color_set_d = ['#264653','#287271','#2a9d8f','#e9c46a','#f4a261','#e76f51']
 
 waymo_testing_color = '#82c1ff'
 waymo_deployment_color = '#0583ff'
@@ -118,10 +114,12 @@ period_vmt = pd.read_csv(Path(INDIR) / 'deployment_period_vmt.csv')
 ```
 
 ::: {.callout-important}
-The publicly available data used in the AV Resource Portal Data Dashboard limits the analysis and information presented due to the design of the data reports and redactions made by AV companies under confidential business information claims. Please see [Transparency](./transparency.html) for more information. 
+San Francisco is a prominent center of Autonomous Vehicle (AV) activity. Data describing AV activity in San Francisco, however, is spread across multiple sources, redacted from public reports, collected with insufficient detail, or in some cases not collected at all. Please see [Transparency](./transparency.html) for more information.
 
 This section primarily reports statewide values due to the limitations noted above. 
 :::
+
+This section presents data from the California Department of Motor Vehicles (California DMV) and California Public Utilities Commission (CPUC).  
 
 ## Vehicle Miles Traveled
 
@@ -155,7 +153,7 @@ fig4.show()
 ::: {.column-margin}
 Vehicle miles traveled (VMT) grew gradually from 2020 through 2023 when Waymo's VMT began to expand more rapidly.  Waymo has reported more VMT than other companies in each permit category for most of its history.  
 
-::: {.callout-note}
+::: {.callout-important}
 It is not possible to sum VMT across all permit types to get total VMT because VMT reported to DMV may overlap with VMT reported to CPUC, and because VMT has historically been reported to DMV only under testing permits, but not under deployment permits.  
 :::
 
@@ -206,8 +204,6 @@ synth_da['pmt_over_vmt'] = 1
 synth_bus = synth_da.copy()
 synth_da['label'] = 'Bus'
 synth_da['pmt_over_vmt'] = 12.6
-
-
 
 fig7 = px.line(
     pd.concat(

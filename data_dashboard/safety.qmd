@@ -65,7 +65,7 @@ comp_crashtot_descending = crash.groupby('Company').size().sort_values(ascending
 ```
 
 ::: {.callout-important}
-The publicly available data used in the AV Resource Portal Data Dashboard limits the analysis and information presented due to the design of the data reports and redactions made by AV companies under confidential business information claims. Please see [Transparency](./transparency.html) for more information.
+San Francisco is a prominent center of Autonomous Vehicle (AV) activity. Data describing AV activity in San Francisco, however, is spread across multiple sources, redacted from public reports, collected with insufficient detail, or in some cases not collected at all. Please see [Transparency](./transparency.html) for more information.
 
 Safety analysis uses collision rates, often specified as incidents per million or hundred-million miles, to track trends over time and to make comparisons between different modes, cities, times of day, or other factors. Data limitations prevent aligning collisions and mileage, or even from knowing the total mileage of any AV company's fleet, and as a consequence prevent showing collision rates. 
 :::
@@ -83,8 +83,6 @@ fig1 = px.scatter_map(
     lat='lat',
     lon='lng',
     size='Total',
-    #color='Total',
-    #color_continuous_scale='orrd',
     color_discrete_sequence=['#c1121f'],
     size_max=70,
     hover_name='city',
@@ -136,8 +134,6 @@ fig2 = px.scatter_map(
     lat='lat',
     lon='lng',
     size='Total',
-    #color='Total',
-    #color_continuous_scale='orrd',
     color_discrete_sequence=['#003049'],
     size_max=70,
     hover_name='city',
@@ -269,7 +265,7 @@ fig4.show()
 
 ::: {.column-margin}
 
-Nearly 42% of all collisions occur in San Francisco, more than 3x Los Angeles, the city with the next-highest number of collisions.
+38% of all collisions occur in San Francisco, almost 3x Los Angeles, the city with the next-highest number of collisions.
 
 ::: {.callout-important}
 Safety performance across cities should be compared using crash rates rather than number of crashes. However, due to data limiations crash rates cannot be calculated.
