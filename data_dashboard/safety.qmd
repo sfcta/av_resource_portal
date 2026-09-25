@@ -170,6 +170,7 @@ fig2.show()
 ```
 
 ::: {.column-margin}
+
 Waymo has more collisions than any other AV company, but numerous AV companies are involved in collisions across the country.
 
 :::
@@ -259,7 +260,7 @@ fig4.show()
 
 ::: {.column-margin}
 
-38% of all collisions occur in San Francisco, almost 3x Los Angeles, the city with the next-highest number of collisions.
+38% of all collisions occur in San Francisco, almost 3x more than Los Angeles, the city with the next-highest number of collisions.
 
 :::
 
@@ -430,6 +431,6 @@ fig8.show()
 
 ::: {.column-margin}
 
-Most crashes result in no injury.  Waymo, the only company operating commercial AV passenger service under a deployment permit, has the most crashes.  Cruise, which also briefly operated commercial AV passenger service under a deployment permit, follows with the second-most number of crashes
+Most crashes result in no injury.  In San Francisco, Waymo has reported the most crashes, followed by Cruise, and then Zoox. Waymo currently holds a CPUC deployment permit, Cruise formerly held a CPUC deployment permit but no longer does, and Zoox holds a DMV deployment permit but does not yet hold a CPUC deployment permit to authorize paid passenger service.
 
 :::

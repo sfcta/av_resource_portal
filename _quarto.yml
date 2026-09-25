@@ -24,8 +24,8 @@ website:
       contents: 
       - text: "Introduction"
         href: data_dashboard/introduction.qmd
-      - text: "Vehicles and People"
-        href: data_dashboard/vehicles_and_people.qmd
+      - text: "Travel Activity"
+        href: data_dashboard/travel_activity.qmd
       - text: "Safety"
         href: data_dashboard/safety.qmd
       - text: "Transparency"

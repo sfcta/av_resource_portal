@@ -33,7 +33,7 @@ The SGO data may contain multiple records for each individual incident, as compa
 ### California Department of Motor Vehicles 
 The data dashboard uses VMT data published by the California DMV published as part of their [disengagement reports](https://dmvpublicaffairs.wetransfer.com/downloads/e6a196103b7a16801d4acd452cf7e35c20260220222733/70cc0b?t_lsid=e71827f1-358f-4135-a906-b9f4223c5633&t_network=link&t_rid=YXV0aDB8VHJhbnNmZXJ8cGg2MjFxMHI5bmc=&t_s=download_link&t_ts=1771626453). These are annual reports covering a period of December - November, and typically released the following February. VMT is reported for each vehicle by vehicle identification number (VIN), but without geographic detail. The disengagement reports (including VMT data) only cover AV activity under testing permits. The California DMV has historically not collected data under deployment permits. 
 
-The DMV approved [new regulations](https://www.dmv.ca.gov/portal/vehicle-industry-services/autonomous-vehicles/california-autonomous-vehicle-regulations/) on [April 28, 2026](https://www.dmv.ca.gov/portal/news-and-media/new-autonomous-vehicle-regulations-strengthen-oversight-and-enforcement-authorize-trucks-and-transit/), which will expand data reporting to include new types of data and, importantly, require companies with deployment permits to report data. The first quarterly reports under the new regulations will cover the period July 1, 2026 - September 30, 2026. It is not clear if or when quarterly report data will be made available to the public.
+The California DMV approved [new regulations](https://www.dmv.ca.gov/portal/vehicle-industry-services/autonomous-vehicles/california-autonomous-vehicle-regulations/) on [April 28, 2026](https://www.dmv.ca.gov/portal/news-and-media/new-autonomous-vehicle-regulations-strengthen-oversight-and-enforcement-authorize-trucks-and-transit/), which will expand data reporting to include new types of data and, importantly, require companies with deployment permits to report data. The first quarterly reports under the new regulations will cover the period July 1, 2026 - September 30, 2026. It is not clear if or when quarterly report data will be made available to the public.
 
 [California DMV Disengagement Reports](https://dmvpublicaffairs.wetransfer.com/downloads/e6a196103b7a16801d4acd452cf7e35c20260220222733/70cc0b?t_lsid=e71827f1-358f-4135-a906-b9f4223c5633&t_network=link&t_rid=YXV0aDB8VHJhbnNmZXJ8cGg2MjFxMHI5bmc=&t_s=download_link&t_ts=1771626453)
 
@@ -45,9 +45,7 @@ The CPUC collects rudimentary data for companies operating with pilot permits. P
 [CPUC Quarterly Reports](https://www.cpuc.ca.gov/regulatory-services/licensing/transportation-licensing-and-analysis-branch/autonomous-vehicle-programs/quarterly-reporting)
 
 ## Interoperability and Challenges
-The [vehicles and people](./vehicles_and_people.html) and [safety](./safety.html) pages use callout boxes to identify how data limitations affect the information presented.  
-
-Some of the key issues are:
+The [Travel Activity](./travel_activity.html) and [safety](./safety.html) pages use callout boxes to identify how data limitations affect the information presented. Some of the key issues are:
 
 - The CPUC's quarterly pilot reports are structured differently and are incompatible with the quarterly deployment reports
 - The cadence and reporting periods of CPUC and DMV data have historically differed

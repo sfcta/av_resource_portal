@@ -1,5 +1,5 @@
 ---
-title: Vehicles and People
+title: Travel Activity
 execute:
     echo: false
 format: 
@@ -118,7 +118,7 @@ San Francisco is a prominent center of Autonomous Vehicle (AV) activity. Data de
 
 This section presents data from the California Department of Motor Vehicles (California DMV) and California Public Utilities Commission (CPUC). **Except as otherwise noted, figures reflect statewide values.**
 
-Waymo is currently the only company with approval to provide paid passenger service from the CPUC in California. Cruise previously held a passenger service deployment permit. In addition to Waymo, Zoox holds a deployment permit with the California DMV, but does not yet have a CPUC deployment permit.
+Waymo is currently the only company with approval to provide paid passenger service from the CPUC in California. Cruise previously held a passenger service deployment permit. In addition to Waymo, Zoox holds a deployment permit with the California DMV, but does not yet have a CPUC deployment permit. Dozens of other companies hold DMV testing permits. 
 :::
 
 ## Vehicle Miles Traveled
@@ -128,7 +128,7 @@ Waymo is currently the only company with approval to provide paid passenger serv
 #| fig-cap: "VMT by Company and Permit Type in California"
 #| cap-location: margin
 
-fig4 = px.line(
+fig1 = px.line(
     vmt_long.loc[:,['date','label','vmt']], 
     x='date', 
     y='vmt',
@@ -139,7 +139,7 @@ fig4 = px.line(
     #height=500,
 )
 
-fig4.update_layout(
+fig1.update_layout(
     legend=dict(
         title='',
         orientation='h'
@@ -147,7 +147,7 @@ fig4.update_layout(
     yaxis_title=None,
     xaxis_title=None,
 )
-fig4.show()
+fig1.show()
 ```
 
 ::: {.column-margin}
@@ -161,9 +161,9 @@ The VMT in Figure 1 cannot be summed to total AV VMT because VMT reported to the
 
 ```{python}
 #| label: fig-vmt-period
-#| fig-cap: "VMT by Period in California"
+#| fig-cap: "Driverless Deployment VMT by Period in California"
 
-fig5 = px.area(
+fig2 = px.area(
     period_vmt.loc[:,['company','date','period','period_vmt']], 
     x='date', 
     y='period_vmt',
@@ -171,9 +171,9 @@ fig5 = px.area(
     color='period',
     color_discrete_map=period_color_map,
 )
-fig5.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
+fig2.for_each_annotation(lambda a: a.update(text=a.text.split("=")[-1]))
 
-fig5.update_layout(
+fig2.update_layout(
     legend=dict(
         title='',
         orientation='h'
@@ -181,7 +181,7 @@ fig5.update_layout(
     yaxis_title=None,
     xaxis_title=None,
 )
-fig5.show()
+fig2.show()
 ```
 
 ::: {.column-margin}
@@ -191,12 +191,12 @@ The CPUC categorizes passenger service into 3 periods:
 - Period 2. Driving to pick up a passenger
 - Period 3. Transporting the passenger.  
 
-Data by period of service is reported to CPUC by companies operating under deployment permits.  Waymo is the only company currently operating driverless deployment passenger service.  Their VMT throughout California has grown consistently over time with only a few notable dips.  Cruise briefly operated driverless deployment passenger service before their permit was suspended and eventually revoked.  
+Data by period of service is reported to CPUC by companies operating under deployment permits. Driving in period 1 and 2 adds mileage to the roadway and contributes to congestion without moving people.
 :::
 
 ```{python}
 #| label: fig-pmt-vmt
-#| fig-cap: "Passenger Mileage Efficiency in California"
+#| fig-cap: "Driverless Deployment Weighted Vehicle Occupancy in California"
 
 synth_da = trip_long[['date']].drop_duplicates()
 synth_da['label'] = 'Drive alone'
@@ -205,7 +205,7 @@ synth_bus = synth_da.copy()
 synth_da['label'] = 'Bus'
 synth_da['pmt_over_vmt'] = 12.6
 
-fig7 = px.line(
+fig3 = px.line(
     pd.concat(
         [trip_long.loc[:,['date','label','pmt_over_vmt']],
          synth_da,
@@ -220,7 +220,7 @@ fig7 = px.line(
     line_dash_map=company_permit_type_dash_map,
 )
 
-fig7.update_layout(
+fig3.update_layout(
     legend=dict(
         title='',
         orientation='h'
@@ -232,7 +232,7 @@ fig7.update_layout(
     selector=lambda t: t.name in ["Bus"]
 )
 
-fig7.show()
+fig3.show()
 ```
 
 ::: {.column-margin}
@@ -242,9 +242,9 @@ Weighted vehicle occupancy measures how many miles people travel for each vehicl
 
 ```{python}
 #| label: fig-deadheading
-#| fig-cap: "Deadheading Share of Total VMT in California"
+#| fig-cap: "Deadheading Share of Total Driverless Deployment VMT in California"
 
-fig8 = px.line(
+fig4 = px.line(
     trip_long.loc[:,['date','label','deadhead_rate']], 
     x='date', 
     y='deadhead_rate',
@@ -254,7 +254,7 @@ fig8 = px.line(
     line_dash_map=company_permit_type_dash_map,
 )
 
-fig8.update_layout(
+fig4.update_layout(
     legend=dict(
         title='',
         orientation='h',
@@ -265,7 +265,7 @@ fig8.update_layout(
     yaxis_title=None,
     xaxis_title=None,
 )
-fig8.show()
+fig4.show()
 ```
 
 ::: {.column-margin}
@@ -275,40 +275,11 @@ Deadheading is empty mileage driven by an AV in between passenger trips (i.e. pe
 ## Passenger Trips
 
 ```{python}
-#| label: fig-trips-company-permit
-#| fig-cap: "Passenger Trips by Company and Permit Type in California"
-
-fig1 = px.line(
-    trip_long.loc[:,['date','label','trips']], 
-    x='date', 
-    y='trips',
-    color='label',
-    color_discrete_map=company_permit_type_color_map,
-    line_dash='label',
-    line_dash_map=company_permit_type_dash_map,
-)
-fig1.update_layout(
-    legend=dict(
-        title='',
-        orientation='h'
-        ),
-    yaxis_title=None,
-    xaxis_title=None,
-    )
-fig1.show()
-```
-
-::: {.column-margin}
-Passenger trips are reported for companies operating under CPUC pilot and deployment permits.  Under pilot permits, a single statewide number is reported by month.  Under deployment permits trips are reported as monthly statewide totals, totals by Census Tract, and as individual trip records. Totals by Census Tract and invdividual trip records are heavily redacted. 
-:::
-
-
-```{python}
 #| label: fig-trips-company-county
 #| cap-location: margin
-#| fig-cap: "Passenger Trips by Company and County"
+#| fig-cap: "Driverless Deployment Passenger Trips by Company and County"
 
-fig3 = px.bar(
+fig5 = px.bar(
     trip_county_long.loc[:,['date','label','trips_start']], 
     x='date', 
     y='trips_start',
@@ -322,7 +293,7 @@ fig3 = px.bar(
     selector=({'legendgroup':'Waymo Unidentified'}),
 )
 
-fig3.update_layout(
+fig5.update_layout(
     legend=dict(
         title='',
         orientation='h'
@@ -331,27 +302,27 @@ fig3.update_layout(
     xaxis_title=None,
     )
 
-fig3.show()
+fig5.show()
 ``` 
 
 ::: {.column-margin}
 
-In December 2024, the last month Waymo reported unredacted tract-level trip data, about 74% of trips were in San Francisco, 25% in Los Angeles, and less than 1% in San Mateo.  Since then, it is not clear where growth is happening or whether Waymo has expanded into new markets.
+Companies with deployment permits report trips as monthly statewide totals, totals by Census Tract, and as individual trip records. Totals by Census Tract and invdividual trip records are heavily redacted. 
 
 ::: {.callout-note}
-Waymo began redacting tract-level trip data in the first quarter of 2025. The county-level totals below are derived from tract-level data and therefore only statewide totals are shown from 2025 on.
+Waymo began redacting Census Tract trip data in the first quarter of 2025. County totals are derived from Census Tract data and therefore only statewide totals are shown from 2025 on. In December 2024, Waymo reported 400,000 trips in San Francisco and 540,000 trips statewide. Since then, their growth could be a mix of growth in existing markets and expansion into new markets.
 :::
 
 :::
 
 
-### Geographic Distribution of Passenger Trips Under a Deployment Permit (2024 and earlier)
+### Geographic Distribution of Driverless Deployment Trips (2024 and earlier)
 
 ```{=html}
 
 <div class="column-body">
     <figcaption>
-    Figure 7: Density of Passenger Trips in San Francisco
+    Figure 6: Density of Passenger Trips in San Francisco
     </figcaption>
     <iframe id="scaled-frame" src="https://sfcta.github.io/report-tncs2020-simwrapper/files/simwrapper-data/reports/av_dashboard/viz-map-san-francisco.yaml?embed" height=500 width=100%></iframe>
 </div>
@@ -359,7 +330,7 @@ Waymo began redacting tract-level trip data in the first quarter of 2025. The co
 
 ::: {.column-margin}
 
-Through 2024 AV companies operated commercial passenger service only in San Francisco and Los Angeles and service was much more heavily concentrated in San Francisco, particularly in and around downtown. Waymo began redacting tract-level trip data in the first quarter of 2025. These maps only contain data up until December 2024.
+Through 2024 AV companies operated commercial passenger service only in San Francisco, San Mateo, and Los Angeles and service was much more heavily concentrated in San Francisco, particularly in and around downtown. Waymo began redacting tract-level trip data in the first quarter of 2025. These maps only contain data up until December 2024.
 
 ::: {.callout-note}
 Waymo and Cruise used different geographical boundaries to report trips. Waymo used 2010 Census Tracts, while Cruise used 2020 Census Tracts.  Cruise trips in this map were re-apportioned from 2020 Census Tracts to 2010 Census Tracts.
@@ -370,7 +341,7 @@ Waymo and Cruise used different geographical boundaries to report trips. Waymo u
 ```{=html}
 <div class="column-body">
     <figcaption>
-    Figure 8: Density of Passenger Trips in Los Angeles
+    Figure 7: Density of Passenger Trips in Los Angeles
     </figcaption>
     <iframe id="scaled-frame" src="https://sfcta.github.io/report-tncs2020-simwrapper/files/simwrapper-data/reports/av_dashboard/viz-map-los-angeles.yaml?embed" height=500 width=100%></iframe>
 </div>
