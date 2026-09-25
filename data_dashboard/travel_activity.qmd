@@ -5,7 +5,7 @@ execute:
 format: 
     html:
         page-layout: article
-        title-block-banner: true
+        title-block-banner: false
         grid:
             body-width: 900px
 reference-location: margin
