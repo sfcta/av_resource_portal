@@ -113,19 +113,19 @@ trip_county_long = pd.read_csv(Path(INDIR) / 'deployment_trips_by_county.csv')
 period_vmt = pd.read_csv(Path(INDIR) / 'deployment_period_vmt.csv')
 ```
 
-::: {.callout-important}
+::: {.callout-note}
 San Francisco is a prominent center of Autonomous Vehicle (AV) activity. Data describing AV activity in San Francisco, however, is spread across multiple sources, redacted from public reports, collected with insufficient detail, or in some cases not collected at all. Please see [Transparency](./transparency.html) for more information.
 
-This section primarily reports statewide values due to the limitations noted above. 
-:::
+This section presents data from the California Department of Motor Vehicles (California DMV) and California Public Utilities Commission (CPUC). **Except as otherwise noted, figures reflect statewide values.**
 
-This section presents data from the California Department of Motor Vehicles (California DMV) and California Public Utilities Commission (CPUC).  
+Waymo is currently the only company with approval to provide paid passenger service from the CPUC in California. Cruise previously held a passenger service deployment permit. In addition to Waymo, Zoox holds a deployment permit with the California DMV, but does not yet have a CPUC deployment permit.
+:::
 
 ## Vehicle Miles Traveled
 
 ```{python}
 #| label: fig-vmt-company-permit
-#| fig-cap: "VMT by Company and Permit Type"
+#| fig-cap: "VMT by Company and Permit Type in California"
 #| cap-location: margin
 
 fig4 = px.line(
@@ -151,17 +151,17 @@ fig4.show()
 ```
 
 ::: {.column-margin}
-Vehicle miles traveled (VMT) grew gradually from 2020 through 2023 when Waymo's VMT began to expand more rapidly.  Waymo has reported more VMT than other companies in each permit category for most of its history.  
+Vehicle miles traveled (VMT) grew gradually from 2020 through 2023 when Waymo's VMT began to expand more rapidly.  Waymo has reported more VMT in driverless deployment than under any of its other permits, and more than any other company under any permit.  
 
-::: {.callout-important}
-It is not possible to sum VMT across all permit types to get total VMT because VMT reported to DMV may overlap with VMT reported to CPUC, and because VMT has historically been reported to DMV only under testing permits, but not under deployment permits.  
+::: {.callout-note}
+The VMT in Figure 1 cannot be summed to total AV VMT because VMT reported to the California DMV under testing permits may overlap with VMT reported to CPUC and VMT has not historically been reported under California DMV deployment permits. 
 :::
 
 :::
 
 ```{python}
-#| label: fig-vmt-phase
-#| fig-cap: "VMT by Phase"
+#| label: fig-vmt-period
+#| fig-cap: "VMT by Period in California"
 
 fig5 = px.area(
     period_vmt.loc[:,['company','date','period','period_vmt']], 
@@ -196,7 +196,7 @@ Data by period of service is reported to CPUC by companies operating under deplo
 
 ```{python}
 #| label: fig-pmt-vmt
-#| fig-cap: "Passenger Mileage Efficiency"
+#| fig-cap: "Passenger Mileage Efficiency in California"
 
 synth_da = trip_long[['date']].drop_duplicates()
 synth_da['label'] = 'Drive alone'
@@ -242,7 +242,7 @@ Weighted vehicle occupancy measures how many miles people travel for each vehicl
 
 ```{python}
 #| label: fig-deadheading
-#| fig-cap: "Deadheading"
+#| fig-cap: "Deadheading Share of Total VMT in California"
 
 fig8 = px.line(
     trip_long.loc[:,['date','label','deadhead_rate']], 
@@ -269,14 +269,14 @@ fig8.show()
 ```
 
 ::: {.column-margin}
-AV passenger services drive around empty in between trips in period 1 and period 2 described above.  This is called deadheading.  Deadheading decreased over time before leveling-off slightly over 40% of all miles driven in passenger service.  
+Deadheading is empty mileage driven by an AV in between passenger trips (i.e. period 1 and period 2 described above). The deadheading percentage of total miles driven decreased over time before leveling-off slightly over 40% of all miles driven in passenger service.  
 :::
 
 ## Passenger Trips
 
 ```{python}
 #| label: fig-trips-company-permit
-#| fig-cap: "Passenger Trips by Company and Permit Type"
+#| fig-cap: "Passenger Trips by Company and Permit Type in California"
 
 fig1 = px.line(
     trip_long.loc[:,['date','label','trips']], 
@@ -299,7 +299,7 @@ fig1.show()
 ```
 
 ::: {.column-margin}
-Passenger trips are reported for companies operating under CPUC pilot and deployment permits.  Under pilot permits, a single statewide number is reported by month.  Under deployment permits, trips are reported by Census Tract.  
+Passenger trips are reported for companies operating under CPUC pilot and deployment permits.  Under pilot permits, a single statewide number is reported by month.  Under deployment permits trips are reported as monthly statewide totals, totals by Census Tract, and as individual trip records. Totals by Census Tract and invdividual trip records are heavily redacted. 
 :::
 
 
@@ -338,22 +338,20 @@ fig3.show()
 
 In December 2024, the last month Waymo reported unredacted tract-level trip data, about 74% of trips were in San Francisco, 25% in Los Angeles, and less than 1% in San Mateo.  Since then, it is not clear where growth is happening or whether Waymo has expanded into new markets.
 
-::: {.callout-important}
+::: {.callout-note}
 Waymo began redacting tract-level trip data in the first quarter of 2025. The county-level totals below are derived from tract-level data and therefore only statewide totals are shown from 2025 on.
-
-Waymo is currently the only company with approval to provide paid passenger service in California.
 :::
 
 :::
 
 
-### Geographic Distribution (2024 and earlier)
+### Geographic Distribution of Passenger Trips Under a Deployment Permit (2024 and earlier)
 
 ```{=html}
 
 <div class="column-body">
     <figcaption>
-    Figure 7: San Francisco Trip Density
+    Figure 7: Density of Passenger Trips in San Francisco
     </figcaption>
     <iframe id="scaled-frame" src="https://sfcta.github.io/report-tncs2020-simwrapper/files/simwrapper-data/reports/av_dashboard/viz-map-san-francisco.yaml?embed" height=500 width=100%></iframe>
 </div>
@@ -361,16 +359,10 @@ Waymo is currently the only company with approval to provide paid passenger serv
 
 ::: {.column-margin}
 
-Through 2024 AV companies operated commercial passenger service only in San Francisco and Los Angeles and service was much more heavily concentrated in San Francisco, particularly in and around downtown.
+Through 2024 AV companies operated commercial passenger service only in San Francisco and Los Angeles and service was much more heavily concentrated in San Francisco, particularly in and around downtown. Waymo began redacting tract-level trip data in the first quarter of 2025. These maps only contain data up until December 2024.
 
-::: {.callout-important}
-Waymo began redacting tract-level trip data in the first quarter of 2025. The maps below only contain data up until December 2024.
-
-Waymo is currently the only company with approval to provide paid passenger service in California.
-:::
-
-::: {.callout-important}
-Waymo reported tract-level data using 2010 Census Tract definitions, while Cruise used 2020 Census Tract definitions.  To preserve accuracy, and because Waymo reported orders of magnitude more trips than Cruise, Cruise trips were re-apportioned from 2020 Census Tracts to 2010 Census Tracts in this map.
+::: {.callout-note}
+Waymo and Cruise used different geographical boundaries to report trips. Waymo used 2010 Census Tracts, while Cruise used 2020 Census Tracts.  Cruise trips in this map were re-apportioned from 2020 Census Tracts to 2010 Census Tracts.
 :::
 
 :::
@@ -378,9 +370,8 @@ Waymo reported tract-level data using 2010 Census Tract definitions, while Cruis
 ```{=html}
 <div class="column-body">
     <figcaption>
-    Figure 9: Los Angeles Trip Density
+    Figure 8: Density of Passenger Trips in Los Angeles
     </figcaption>
     <iframe id="scaled-frame" src="https://sfcta.github.io/report-tncs2020-simwrapper/files/simwrapper-data/reports/av_dashboard/viz-map-los-angeles.yaml?embed" height=500 width=100%></iframe>
 </div>
 ```
-

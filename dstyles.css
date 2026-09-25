@@ -1,0 +1,17 @@
+/* css styles */
+.navbar-logo {
+  min-height: 60px;
+  max-height: 60px;
+}
+
+div.callout-important {
+  border-left-color: #c41d4a !important;
+}
+
+div.callout-warning {
+  border-left-color: #ffb81d !important;
+}
+
+div.callout-note {
+  border-left-color: #a0d0cb !important;
+}

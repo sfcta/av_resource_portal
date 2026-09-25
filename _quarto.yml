@@ -9,12 +9,16 @@ website:
   bread-crumbs: true
   page-navigation: true
   navbar:
+    title: false
+    logo: "resources/SFCTA Logo dark-background.png"
+    logo-href: "https://www.sfcta.org/"
+    pinned: true
+    background: "#006c69"
     left:
       - text: "Data Dashboard"
         href: data_dashboard/introduction.qmd
-      - text: "Permit Overview"
-        href: permit_history/permit_history.qmd
-      - about.qmd
+      - text: "Learn More"
+        href: "https://www.sfcta.org/policies/av#panel-overview"
   sidebar:
     - title: "Data Dashboard"
       contents: 
@@ -33,7 +37,9 @@ format:
     theme:
       - cosmo
       - brand
-    css: styles.css
+    css: ./dstyles.css
+    callout-appearance: minimal
+    lightbox: true
     
 
 

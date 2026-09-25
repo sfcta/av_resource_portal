@@ -10,14 +10,12 @@ reference-location: margin
 citation-location: margin
 ---
 
-::: {.callout-important}
+::: {.callout-note}
 San Francisco is a prominent center of Autonomous Vehicle (AV) activity. Data describing AV activity in San Francisco, however, is spread across multiple sources, redacted from public reports, collected with insufficient detail, or in some cases not collected at all. Please see [Transparency](./transparency.html) for more information.
 :::
 
 ::: {.column-body}
-San Francisco is a prominent center of Autonomous Vehicle (AV) activity. Data describing AV activity in San Francisco, however, is spread across multiple sources, redacted from public reports, collected with insufficient detail, or in some cases not collected at all. Please see [Transparency](./transparency.html) for more information.
+This dashboard provides insights into AV activity using publicly available data collected by the California Department of Motor Vehicles (California DMV), the California Public Utilities Commission (CPUC), and the National Highway Transportation Safety Administration (NHTSA). Where possible, it focuses on San Francisco, but in many cases is limited to California statewide analysis. See Chapter 2 of the [AV Conceptual Permitting Framework](https://www.sfcta.org/reports/conceptual-safety-focused-av-permitting-framework) for more information about the regulatory roles of each agency, and the [Transparency](./transparency.html) section for more information about the data they collect.
 
-This dashboard uses publicly available data collected by the California Department of Motor Vehicles (California DMV), California Public Utilities Commission (CPUC), and National Highway Transportation Safety Administration (NHTSA). Where possible, it provides insights into AV activity in San Francisco, but in many cases only California statewide activity is available. 
-
-The first AV testing permits were issued by the California DMV in 2018 to companies testing without safety drivers.  The first driverless deployment permit was issued to Waymo in 2021.  Until this year (2026), a company operating under a deployment permit was not required to report any data to the DMV.  CPUC, which regulates AV passenger services like Waymo and Zoox, began issuing AV pilot permits in 2018 and deployment permits in 2022.
+Waymo is currently the only company with approval to provide paid passenger service from the CPUC in California. Cruise previously held a passenger service deployment permit. In addition to Waymo, Zoox holds a deployment permit with the California DMV, but does not yet have a CPUC deployment permit.
 :::

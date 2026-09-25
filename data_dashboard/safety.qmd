@@ -62,15 +62,18 @@ crash_geo_comp = pd.read_csv(Path(INDIR) / 'crash_geo_comp.csv')
 crash_state['San Francisco'] = crash_state['San Francisco'].astype(str)
 severity_order = ['No Injuries Reported','Minor','Moderate','Serious','Fatality','Unknown']
 comp_crashtot_descending = crash.groupby('Company').size().sort_values(ascending=False).index.tolist()
+city_crashtot_descending = crash_city.loc[crash_city['City'].ne('All Others Combined')].groupby('City').size().sort_values(ascending=False).index.tolist()
+city_crashtot_descending.append('All Others Combined')
 ```
 
-::: {.callout-important}
+::: {.callout-note collapse="true"}
 San Francisco is a prominent center of Autonomous Vehicle (AV) activity. Data describing AV activity in San Francisco, however, is spread across multiple sources, redacted from public reports, collected with insufficient detail, or in some cases not collected at all. Please see [Transparency](./transparency.html) for more information.
 
-Safety analysis uses collision rates, often specified as incidents per million or hundred-million miles, to track trends over time and to make comparisons between different modes, cities, times of day, or other factors. Data limitations prevent aligning collisions and mileage, or even from knowing the total mileage of any AV company's fleet, and as a consequence prevent showing collision rates. 
-:::
+This section presents a national set of collision data from the National Highway Transportation Safety Administration (NHTSA) [Standing General Order 2021-01 (SGO)](https://www.nhtsa.gov/laws-regulations/standing-general-order-crash-reporting). Collisions are required to be reported to NHTSA under any phase of testing or deployment within the criteria specified in the SGO.
 
-This section presents collision data from the National Highway Transportation Safety Administration (NHTSA) [Standing General Order 2021-01 (SGO)](https://www.nhtsa.gov/laws-regulations/standing-general-order-crash-reporting).  
+Safety analysis typically uses collision rates, often specified as incidents per million or hundred-million miles, to track trends over time and to make comparisons between different modes, cities, times of day, or other factors. Data limitations prevent aligning collisions and vehicle mileage, or even from knowing the total mileage of any AV company's fleet. As a consequence, this page only shows collision totals. 
+
+:::
 
 ## Crashes in the US
 
@@ -119,8 +122,8 @@ fig1.show()
 ::: {.column-margin}
 AV crashes are reported throughout the country, but the largest single concentration is in San Francisco. Most result in no injury, but there are cases of injuries and fatalities.
 
-::: {.callout-important}
-Safety performance across cities should be compared using crash rates rather than number of crashes. However, due to data limiations crash rates cannot be calculated.
+::: {.callout-note}
+Safety performance across cities, states, or companies should be compared using crash rates rather than number of crashes. However, due to data limitations crash rates cannot be calculated.
 :::
 
 :::
@@ -168,10 +171,6 @@ fig2.show()
 
 ::: {.column-margin}
 Waymo has more collisions than any other AV company, but numerous AV companies are involved in collisions across the country.
-
-::: {.callout-important}
-Safety performance across companies should be compared using crash rates rather than number of crashes. However, due to data limiations crash rates cannot be calculated.
-:::
 
 :::
 
@@ -229,10 +228,6 @@ fig3.show()
 
 San Francisco **alone** has more crashes than any the rest of California, or other state, despite having an area less than 50 square miles.
 
-::: {.callout-important}
-Safety performance across states should be compared using crash rates rather than number of crashes. However, due to data limiations crash rates cannot be calculated.
-:::
-
 :::
 
 ```{python}
@@ -240,11 +235,13 @@ Safety performance across states should be compared using crash rates rather tha
 #| fig-cap: "Crashes by City"
 #| cap-location: top
 
-fig4 = px.pie(
+fig4 = px.bar(
     crash_city,
-    names='City',
-    values='Crashes',
-    color_discrete_sequence=['#636efa','#b6baf0'] * (int(len(crash_city) / 2) +1)
+    text=crash_city['Percent of Crashes'].map(lambda x: '{:0.1%}'.format(x)),
+    x='Crashes',
+    y='City',
+    orientation='h',
+    barmode='stack'
 )
 
 fig4.update_layout(
@@ -252,12 +249,9 @@ fig4.update_layout(
     xaxis_title=None,
 )
 
-fig4.update_traces(
-    dict(marker_pattern_bgcolor=all_others_combined_bgcolor,
-         marker_pattern_fgcolor=all_others_combined_fgcolor,
-         marker_pattern_shape='/',
-        ),
-    selector=({'legendgroup':'All Others Combined'}),
+fig4.update_yaxes(
+    ticklabelposition="inside",  # Moves the labels inside the plot area
+    #tickfont=dict(color="white", size=14)
 )
 
 fig4.show()
@@ -266,10 +260,6 @@ fig4.show()
 ::: {.column-margin}
 
 38% of all collisions occur in San Francisco, almost 3x Los Angeles, the city with the next-highest number of collisions.
-
-::: {.callout-important}
-Safety performance across cities should be compared using crash rates rather than number of crashes. However, due to data limiations crash rates cannot be calculated.
-:::
 
 :::
 
@@ -439,10 +429,7 @@ fig8.show()
 :::
 
 ::: {.column-margin}
-Most crashes result in no injury.  Waymo, the only company operating commercial AV passenger service under a deployment permit, has the most crashes.  Cruise, which also briefly operated commercial AV passenger service under a deployment permit, follows with the second-most number of crashes
 
-::: {.callout-important}
-Safety performance across companies should be compared using crash rates rather than number of crashes. However, due to data limiations crash rates cannot be calculated.
-:::
+Most crashes result in no injury.  Waymo, the only company operating commercial AV passenger service under a deployment permit, has the most crashes.  Cruise, which also briefly operated commercial AV passenger service under a deployment permit, follows with the second-most number of crashes
 
 :::

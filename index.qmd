@@ -8,5 +8,5 @@ citation-location: margin
 Welcome to the AV Resource Portal.  
 
 - [AV Data Dashboard](./data_dashboard/introduction.html)
-- [Permit Overview](./permit_history/permit_history.html) (coming soon)
+- Permit Overview (coming soon)
 - Regulation Resource (coming soon)

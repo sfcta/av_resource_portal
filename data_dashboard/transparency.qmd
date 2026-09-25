@@ -10,7 +10,7 @@ reference-location: margin
 citation-location: margin
 ---
 
-::: {.callout-important}
+::: {.callout-note}
 San Francisco is a prominent center of Autonomous Vehicle (AV) activity. Data describing AV activity in San Francisco, however, is spread across multiple sources, redacted from public reports, collected with insufficient detail, or in some cases not collected at all. 
 :::
 
@@ -18,7 +18,7 @@ San Francisco is a prominent center of Autonomous Vehicle (AV) activity. Data de
 The data used in the AV Resource Portal is from public versions of data released by the California Department of Motor Vehicles (California DMV), California Public Utilities Commission (CPUC), and National Highway Transportation Safety Administration (NHTSA).
 
 ### National Highway Transportation Safety Administration
-NHTSA's [Standing General Order (SGO)](https://www.nhtsa.gov/sites/nhtsa.gov/files/2025-04/third-amended-SGO-2021-01_2025.pdf) is the most comprehensive source of AV collision data in the United States.  The third amendment to the SGO changed the data schema and the requirements specifying which events must be reported, but the new version is largely compatible with the legacy data.
+The data dashboard uses AV collision data collected under NHTSA's [Standing General Order (SGO)](https://www.nhtsa.gov/sites/nhtsa.gov/files/2025-04/third-amended-SGO-2021-01_2025.pdf), which is the most comprehensive source of AV collision data in the United States.  The third amendment to the SGO changed the data schema and the requirements specifying which events must be reported, but the new version is largely compatible with the legacy data.
 
 The SGO data is typically updated monthly.  Some data in the public version is truncated or redacted, including:
 
@@ -28,25 +28,21 @@ The SGO data is typically updated monthly.  Some data in the public version is t
 
 The SGO data may contain multiple records for each individual incident, as companies file updated reports with NHTSA.  If you are working with this, take care to use the newest version of each incident record, identified by `Same Incident ID`.
 
-[source](https://www.nhtsa.gov/laws-regulations/standing-general-order-crash-reporting)
+[NHTSA SGO Data](https://www.nhtsa.gov/laws-regulations/standing-general-order-crash-reporting)
 
 ### California Department of Motor Vehicles 
-The DMV approved [new regulations](https://www.dmv.ca.gov/portal/vehicle-industry-services/autonomous-vehicles/california-autonomous-vehicle-regulations/) on [April 28, 2026](https://www.dmv.ca.gov/portal/news-and-media/new-autonomous-vehicle-regulations-strengthen-oversight-and-enforcement-authorize-trucks-and-transit/), which expand data reporting to include new types of data and, importantly, require companies with deployment permits to report data. Previous regulations only required companies with testing permits to report data. The first quarterly reports under the new regulations will cover the period July 1, 2026 - September 30, 2026. It is not clear if or when quarterly report data will be made available to the public.
+The data dashboard uses VMT data published by the California DMV published as part of their [disengagement reports](https://dmvpublicaffairs.wetransfer.com/downloads/e6a196103b7a16801d4acd452cf7e35c20260220222733/70cc0b?t_lsid=e71827f1-358f-4135-a906-b9f4223c5633&t_network=link&t_rid=YXV0aDB8VHJhbnNmZXJ8cGg2MjFxMHI5bmc=&t_s=download_link&t_ts=1771626453). These are annual reports covering a period of December - November, and typically released the following February. VMT is reported for each vehicle by vehicle identification number (VIN), but without geographic detail. The disengagement reports (including VMT data) only cover AV activity under testing permits. The California DMV has historically not collected data under deployment permits. 
 
-Data under the previous rules was reported annually covering a period of December - November, and typically released the following February.  The reporting cadence results in a long lag in data availability and the data reporting period inhibits interoperability with other data sources. 
+The DMV approved [new regulations](https://www.dmv.ca.gov/portal/vehicle-industry-services/autonomous-vehicles/california-autonomous-vehicle-regulations/) on [April 28, 2026](https://www.dmv.ca.gov/portal/news-and-media/new-autonomous-vehicle-regulations-strengthen-oversight-and-enforcement-authorize-trucks-and-transit/), which will expand data reporting to include new types of data and, importantly, require companies with deployment permits to report data. The first quarterly reports under the new regulations will cover the period July 1, 2026 - September 30, 2026. It is not clear if or when quarterly report data will be made available to the public.
 
-VMT data is reported without geographic detail, and prior to new regulations was not reported in deployment at all.  
-
-[source](https://dmvpublicaffairs.wetransfer.com/downloads/e6a196103b7a16801d4acd452cf7e35c20260220222733/70cc0b?t_lsid=e71827f1-358f-4135-a906-b9f4223c5633&t_network=link&t_rid=YXV0aDB8VHJhbnNmZXJ8cGg2MjFxMHI5bmc=&t_s=download_link&t_ts=1771626453)
+[California DMV Disengagement Reports](https://dmvpublicaffairs.wetransfer.com/downloads/e6a196103b7a16801d4acd452cf7e35c20260220222733/70cc0b?t_lsid=e71827f1-358f-4135-a906-b9f4223c5633&t_network=link&t_rid=YXV0aDB8VHJhbnNmZXJ8cGg2MjFxMHI5bmc=&t_s=download_link&t_ts=1771626453)
 
 ### California Public Utilities Commission
-The CPUC collects rudimentary data for companies operating with pilot permits, and much more extensive data for companies operating under deployment permits.  
+The data dashboard uses the `Month-Level` and `Monthly Tract` reports that the CPUC collects under its deployment permits. Deployment data is composed of [9 individual reports](https://www.cpuc.ca.gov/-/media/cpuc-website/divisions/consumer-protection-and-enforcement-division/documents/tlab/av-programs/cpuc-av-deployment-data-template-and-dictionary-av-pd---v2.xlsx) filed quarterly. Many of these reports are heavily redacted, limiting their utility.  
 
-Pilot permittees over 300 trips per quarter are subject to deployment reporting requirements. Pilot data is submitted in different file formats and data schemas by different companies, making it very difficult to use.  
+The CPUC collects rudimentary data for companies operating with pilot permits. Pilot permittees over 300 trips per quarter are subject to deployment reporting requirements. Pilot data is submitted in different file formats and data schemas by different companies, making it very difficult to use.  
 
-Deployment data is composed of 9 individual reports filed quarterly. These reports are much more comprehensive and detailed than pilot reports, but they are heavily redacted.  
-
-[source](https://www.cpuc.ca.gov/regulatory-services/licensing/transportation-licensing-and-analysis-branch/autonomous-vehicle-programs/quarterly-reporting)
+[CPUC Quarterly Reports](https://www.cpuc.ca.gov/regulatory-services/licensing/transportation-licensing-and-analysis-branch/autonomous-vehicle-programs/quarterly-reporting)
 
 ## Interoperability and Challenges
 The [vehicles and people](./vehicles_and_people.html) and [safety](./safety.html) pages use callout boxes to identify how data limitations affect the information presented.  
@@ -54,6 +50,15 @@ The [vehicles and people](./vehicles_and_people.html) and [safety](./safety.html
 Some of the key issues are:
 
 - The CPUC's quarterly pilot reports are structured differently and are incompatible with the quarterly deployment reports
+- The cadence and reporting periods of CPUC and DMV data have historically differed
 - CPUC and DMV reports can only be aligned at the statewide, monthly level
 - DMV reports are only available through November 2025
 - Neither the CPUC nor DMV reports can be aligned with NHTSA data for safety analysis
+
+
+## Cleaned Data
+The data dashboard uses data from the sources described above. The data was extensively cleaned and validated using the [AV Data Processor](https://github.com/sfcta/av_data_processor). The full cleaned datasets are available for download here:
+
+ - [Cleaned California DMV VMT Data](../downloads/data/dmv_vmt_20260507.zip)
+ - [Cleaned CPUC Deployment Quarterly Reports](../downloads/data/cpuc_deployment_data_20260825.zip)
+ - [Cleaned NHTSA SGO Collision Data](../downloads/data/nhtsa_ads_crashes_20260825.zip)
